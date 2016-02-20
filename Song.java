@@ -63,5 +63,22 @@ public class Song {
     public void setYear(int year) {
 	this.year = year;
     }
+    //toString override
+        public String toString()
+    {
+    	String songString;
+    	String duration;
+    	songString= songName+"\r\n";
+    	songString+= artist+"\r\n";
+    	songString+= album+"\r\n";
+    	duration= Integer.toString(seconds/60)+':';
+    	if((seconds%60)<10)// convert from seconds to MM:SS
+    		duration+='0'+Integer.toString(seconds%60); 
+    	else
+    		duration+=Integer.toString(seconds%60); 
+    	songString+= duration+"\r\n";
+    	songString+= year+"\r\n";
+    	return songString;
+    }
     
 }
