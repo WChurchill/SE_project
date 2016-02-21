@@ -13,18 +13,16 @@ public class Main {
         
         Song Korn = new Song ("It's On!", "Korn","Follow the Leader",120,1998);
         Song Chevelle = new Song ("Family System","Chevelle","Wonder What's Next",250,2002);
+        Song Bloc = new Song ("Helicopter","Bloc Party","Silent Alarm",120,2001);
+        Song Stone = new Song ("Xeno","Stone Temple Pilots","Hello",120,200);
         
         Songs.add(Korn);
         Songs.add(Chevelle);
+        Songs.add(Bloc);
+        Songs.add(Stone);
         
-        for (int o = 0; o < 2; o++){
-            System.out.println(Songs.get(o).getName());
-        }
-        
-        Songs.sort(new SongComparator());
-        
-        for (int o = 0; o < 2; o++){
-            System.out.println(Songs.get(o).getName());
+        for (int i = 0; i < Songs.size(); i++){
+            System.out.println(Songs.get(i).getName());
         }
         
         Logo();     //Display Logo
@@ -101,7 +99,7 @@ public class Main {
                     input.nextLine();   //Clear buffer
                     System.out.print("Enter name of song: ");   //Prompt user for requested song
                     songSearch = input.nextLine();      //Take result
-                    Song result = searchSong(songSearch, Songs);        //Run searchSong passing songSearch and Songs ArrayList
+                    Song result = binSearch(songSearch, Songs);        //Run searchSong passing songSearch and Songs ArrayList
                 }
                 else if (subChoice ==2){
                     
@@ -147,6 +145,7 @@ public class Main {
     }
     
     public static Song searchSong(String songSearch, ArrayList<Song> Songs){ //searchSong will take string of name of song and Song ArrayList
+        Songs.sort(new SongComparator());
         boolean found = false;  //Initial boolean for found is false
         int ind = 0;    //Initial index for song return is 0
         
@@ -164,5 +163,25 @@ public class Main {
             System.out.println("Not found, null return");       //print failure message
             return null;        //return null
         }
+    }
+    
+    public static Song binSearch(String songSearch, ArrayList<Song> Songs){
+        int low = 0;
+        int high = Songs.size()-1;
+        while (low <= high){
+            int mid = low + (high-low)%2;
+            String songTry = Songs.get(mid).getName();
+            int compare = songTry.compareTo(songSearch);
+            if (compare < 0)
+                high = mid - 1;
+            else if (compare > 0)
+                low = mid + 1;
+            else if (compare == 0){
+                System.out.println("Song found!");
+                return Songs.get(mid);
+            }
+        }
+        System.out.println("Song not found");
+        return null;
     }
 }
