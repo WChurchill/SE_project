@@ -86,7 +86,4 @@ public class Song {
     public int compareTo(Song o){
         return this.songName.compareTo(o.songName);
     }
-    public String toString(){
-        return ("Song: " + this.songName);
-    }
 }
