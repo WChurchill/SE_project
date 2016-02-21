@@ -65,8 +65,28 @@ public class Song {
     public void setYear(int year) {
 	this.year = year;
     }
+
+    // Returns a string representation of a song in human readable format
+    // with labeled attributes
+    public String toLabeledString(){
+	String songString;
+    	String duration;
+    	songString=  " Title:\t"+songName+"\n";
+    	songString+= "Artist:\t"+artist+"\n";
+    	songString+= " Album:\t"+album+"\n";
+    	duration= Integer.toString(seconds/60)+':';
+    	if((seconds%60)<10)// convert from seconds to MM:SS
+	    duration+='0'+Integer.toString(seconds%60); 
+    	else
+	    duration+=Integer.toString(seconds%60); 
+    	songString+= "Length:\t"+duration+"\n";
+    	songString+= "  Year:\t"+year;
+    	return songString;
+    }
+
+    
     //toString override
-        public String toString()
+    public String toString()
     {
     	String songString;
     	String duration;

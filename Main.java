@@ -100,6 +100,11 @@ public class Main {
                     System.out.print("Enter name of song: ");   //Prompt user for requested song
                     songSearch = input.nextLine();      //Take result
                     Song result = binSearch(songSearch, Songs);        //Run searchSong passing songSearch and Songs ArrayList
+		    if(result==null){
+			System.out.println("Search Unsuccessful");
+		    }else{
+			System.out.println(result.toLabeledString());
+		    }
                 }
                 else if (subChoice ==2){
                     
@@ -177,11 +182,11 @@ public class Main {
             else if (compare > 0)
                 low = mid + 1;
             else if (compare == 0){
-                System.out.println("Song found!");
+                //System.out.println("Song found!");
                 return Songs.get(mid);
             }
         }
-        System.out.println("Song not found");
+        //System.out.println("Song not found");
         return null;
     }
 }
