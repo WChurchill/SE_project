@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Song {
     private String songName;
     private String artist;
@@ -64,4 +66,10 @@ public class Song {
 	this.year = year;
     }
     
+    public int compareTo(Song o){
+        return this.songName.compareTo(o.songName);
+    }
+    public String toString(){
+        return ("Song: " + this.songName);
+    }
 }
