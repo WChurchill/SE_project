@@ -99,7 +99,7 @@ public class Main {
                     input.nextLine();   //Clear buffer
                     System.out.print("Enter name of song: ");   //Prompt user for requested song
                     songSearch = input.nextLine();      //Take result
-                    Song result = binSearch(songSearch, Songs);        //Run searchSong passing songSearch and Songs ArrayList
+                    Song result = searchSong(songSearch, Songs);        //Run searchSong passing songSearch and Songs ArrayList
 		    if(result==null){
 			System.out.println("Search Unsuccessful");
 		    }else{
@@ -149,44 +149,26 @@ public class Main {
         System.out.print("1.By Name \n2.By Year\n>>>Enter Choice: ");
     }
     
-    public static Song searchSong(String songSearch, ArrayList<Song> Songs){ //searchSong will take string of name of song and Song ArrayList
-        Songs.sort(new SongComparator());
-        boolean found = false;  //Initial boolean for found is false
-        int ind = 0;    //Initial index for song return is 0
+    public static Song searchSong(String songSearch, ArrayList<Song> Songs){        //searchSong will take String name of song and ArrayList of Songs and use
+        Songs.sort(new SongComparator());//Sort list using songComparator          //binary search to find and return song                
+        for (int i = 0; i < Songs.size(); i++){     //Display Song names after sorting
+            System.out.println(Songs.get(i).getName());
+        }
+        int low = 0;        //initialize low to 0
+        int high = Songs.size()-1;  //initialize high to size of list minus 1
+        while (low <= high){        //while low is less than or equal to high
+            int mid = low + (high-low)/2;       //middle is high minus low divided by 2
+            if (songSearch.compareTo(Songs.get(mid).getName()) < 0)     //if songSearch is less than tested mid name
+                high = mid - 1;     //high is middle minus 1
+            else if (songSearch.compareTo(Songs.get(mid).getName()) > 0)    //if songSearch is higher than tested mid name
+                low = mid + 1;      //low is middle plus 1
+            else if (songSearch.compareTo(Songs.get(mid).getName()) == 0){  //else if equal
+                //System.out.println("Song found!");      //Success message
+                return Songs.get(mid);      //return Song
+            }
+        }
         
-        for (int i = 0; i < Songs.size(); i++){     //for loop to run through Songs ArrayList
-            if (Songs.get(i).getName().equals(songSearch)){     //if name of current element is equal to song request
-                found = true;       //found is true
-                ind = i;        //ind is i
-            }
-        }
-        if (found){     //if song is found
-            System.out.println("Song found!");       //print success message
-            return Songs.get(ind);      //return Song
-        }
-        else {      //else
-            System.out.println("Not found, null return");       //print failure message
-            return null;        //return null
-        }
-    }
-    
-    public static Song binSearch(String songSearch, ArrayList<Song> Songs){
-        int low = 0;
-        int high = Songs.size()-1;
-        while (low <= high){
-            int mid = low + (high-low)%2;
-            String songTry = Songs.get(mid).getName();
-            int compare = songTry.compareTo(songSearch);
-            if (compare < 0)
-                high = mid - 1;
-            else if (compare > 0)
-                low = mid + 1;
-            else if (compare == 0){
-                //System.out.println("Song found!");
-                return Songs.get(mid);
-            }
-        }
-        //System.out.println("Song not found");
-        return null;
+        //System.out.println("Song not found");       //Failure message
+        return null;        //return null
     }
 }
