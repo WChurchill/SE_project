@@ -6,9 +6,26 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        ArrayList<Song> Songs = new ArrayList <Song>();
         Scanner input = new Scanner(System.in);     //input scanner
         int choice = 0;     //int for main menu choice
         int subChoice;      //int for sub-menu choice
+        
+        Song Korn = new Song ("It's On!", "Korn","Follow the Leader",120,1998);
+        Song Chevelle = new Song ("Family System","Chevelle","Wonder What's Next",250,2002);
+        
+        Songs.add(Korn);
+        Songs.add(Chevelle);
+        
+        for (int o = 0; o < 2; o++){
+            System.out.println(Songs.get(o).getName());
+        }
+        
+        Songs.sort(new SongComparator());
+        
+        for (int o = 0; o < 2; o++){
+            System.out.println(Songs.get(o).getName());
+        }
         
         Logo();     //Display Logo
         do{         //Display main menu and take choice
@@ -79,8 +96,12 @@ public class Main {
                     System.out.print(">>>Invalid. Enter Choice 1-3: ");
                     subChoice = input.nextInt();
                 }
-                if (subChoice == 1) {   //if and else if cases based on subChoice to run one of 3 choices
-                    
+                if (subChoice == 1) {   //if choice is 1, songSearch
+                    String songSearch;  //String to hold song requested
+                    input.nextLine();   //Clear buffer
+                    System.out.print("Enter name of song: ");   //Prompt user for requested song
+                    songSearch = input.nextLine();      //Take result
+                    Song result = searchSong(songSearch, Songs);        //Run searchSong passing songSearch and Songs ArrayList
                 }
                 else if (subChoice ==2){
                     
@@ -95,10 +116,8 @@ public class Main {
             case 6:
                 System.exit(0);     //exit program
                 break;
-            }
-                    
-                    
-        } while(choice != 0);       //while choice is not to exit
+                }                     
+            } while(choice != 0);       //while choice is not to exit
        }
     
     public static void Logo(){      //Logo is an ASCII art version of the title- Massive Music Megastore
@@ -125,5 +144,25 @@ public class Main {
     
     public static void searchOptionMenu(){      //searchOptionMenu is a menu that displays 2 choices of search criteria: Name and Year
         System.out.print("1.By Name \n2.By Year\n>>>Enter Choice: ");
+    }
+    
+    public static Song searchSong(String songSearch, ArrayList<Song> Songs){ //searchSong will take string of name of song and Song ArrayList
+        boolean found = false;  //Initial boolean for found is false
+        int ind = 0;    //Initial index for song return is 0
+        
+        for (int i = 0; i < Songs.size(); i++){     //for loop to run through Songs ArrayList
+            if (Songs.get(i).getName().equals(songSearch)){     //if name of current element is equal to song request
+                found = true;       //found is true
+                ind = i;        //ind is i
+            }
+        }
+        if (found){     //if song is found
+            System.out.println("Song found!");       //print success message
+            return Songs.get(ind);      //return Song
+        }
+        else {      //else
+            System.out.println("Not found, null return");       //print failure message
+            return null;        //return null
+        }
     }
 }
