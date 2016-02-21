@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Database {
     Scanner scanner = null;
@@ -34,5 +36,15 @@ public class Database {
 	
 	scanner.close(); // release the file
 	return songList;
+    }
+    public void saveToFile(String filename, ArrayList<Song> songList) throws IOException
+    {
+    	FileWriter save = new FileWriter(filename);
+    	// Loop through the list and print each element to file
+    	for(int i =0; i<songList.size(); i++)
+    	{
+    		save.write(songList.get(i).toString());
+    	}
+    	save.close();//close the file
     }
 }
