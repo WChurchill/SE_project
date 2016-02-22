@@ -44,13 +44,13 @@ public class Main {
                     subChoice = input.nextInt();
                 }
                 if (subChoice == 1) {   //if and else if cases based on subChoice to run one of 3 choices
-                    
+		    System.out.println("Not Implemented");
                 }
                 else if (subChoice ==2){
-                    
+		    System.out.println("Not Implemented");
                 }
                 else if (subChoice ==3){
-                    
+		    System.out.println("Not Implemented");                    
                 }
                 break;
             case 2:
@@ -61,13 +61,13 @@ public class Main {
                     subChoice = input.nextInt();
                 }
                 if (subChoice == 1) {   //if and else if cases based on subChoice to run one of 3 choices
-                    
+		    System.out.println("Not Implemented");                    
                 }
                 else if (subChoice ==2){
-                    
+                    System.out.println("Not Implemented");
                 }
                 else if (subChoice ==3){
-                    
+                    System.out.println("Not Implemented");
                 }
                 break;
             case 3:
@@ -78,13 +78,13 @@ public class Main {
                     subChoice = input.nextInt();
                 }
                 if (subChoice == 1) {   //if and else if cases based on subChoice to run one of 3 choices
-                    
+		    System.out.println("Not Implemented");
                 }
                 else if (subChoice ==2){
-                    
+                    System.out.println("Not Implemented");
                 }
                 else if (subChoice ==3){
-                    
+                    System.out.println("Not Implemented");
                 }
                 break;
             case 4:
@@ -107,14 +107,14 @@ public class Main {
 		    }
                 }
                 else if (subChoice ==2){
-                    
+		    System.out.println("Not Implemented");
                 }
                 else if (subChoice ==3){
-                    
+                    System.out.println("Not Implemented");
                 }
                 break;
             case 5:
-             
+		System.out.println("Not Implemented");
                 break;
             case 6:
                 System.exit(0);     //exit program
