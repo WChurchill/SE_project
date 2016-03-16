@@ -17,6 +17,7 @@ public class Main {
         Song Stone = new Song ("Xeno","Stone Temple Pilots","Hello",120,200);
         
         Songs.add(Korn);
+                
         Songs.add(Chevelle);
         Songs.add(Bloc);
         Songs.add(Stone);
