@@ -12,7 +12,7 @@ import java.util.*;
 public class Customer {
     private String username;
     private String password; 
-    LinkedList<ShoppingCart> history=new LinkedList();
+    LinkedList<ShoppingCart> history=new LinkedList<>();
     
     Customer(){}
     
