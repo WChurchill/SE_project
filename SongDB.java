@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Database {
+public class SongDB {
     Scanner scanner = null;
     
-    public Database(){
+    public SongDB(){
 	
     }
 
@@ -26,11 +26,14 @@ public class Database {
 	    String artist = scanner.nextLine(); // Parse the artist
 	    String album = scanner.nextLine(); // Parse the album
 	    // Time is stored as MM:SS
-	    int minutes = scanner.nextInt(); // Parse the minutes
-	    int seconds = scanner.nextInt(); // Parse seconds
+	    String line = scanner.nextLine();
+	    int splitIndex = line.indexOf(":");
+	    int minutes = Integer.parseInt(line.substring(0,splitIndex)); // Parse the minutes
+	    int seconds = Integer.parseInt(line.substring(splitIndex+1)); // Parse seconds
 	    seconds+=minutes*60; // convert minutes into seconds and add to seconds
+	    
 	    int year = scanner.nextInt();// Parse year YYYY
-
+	    scanner.nextLine();// go to the next line
 	    songList.add(new Song(songName, artist, album, seconds, year));
 	}
 	
