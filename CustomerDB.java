@@ -7,30 +7,20 @@ public class CustomerDB {
 
     public ArrayList<Song> loadFromFile(String filename) throws FileNotFoundException{
 	// Open the file
-	scanner = new Scannder(new File(filename));
+	scanner = new Scanner(new File(filename));
 	
 	// Instantiate the song ArrayList
-	ArrayList<Song> songList = new ArrayList<>();
+	ArrayList<Customer> customerList = new ArrayList<>();
 
 	// Loop over every 5-line song entry in the file
 	while(scanner.hasNextLine()){
-	    String songName = scanner.nextLine(); // Parse the name
-	    String artist = scanner.nextLine(); // Parse the artist
-	    String album = scanner.nextLine(); // Parse the album
-	    // Time is stored as MM:SS
-	    String line = scanner.nextLine();
-	    int splitIndex = line.indexOf(":");
-	    int minutes = Integer.parseInt(line.substring(0,splitIndex)); // Parse the minutes
-	    int seconds = Integer.parseInt(line.substring(splitIndex+1)); // Parse seconds
-	    seconds+=minutes*60; // convert minutes into seconds and add to seconds
-	    
-	    int year = scanner.nextInt();// Parse year YYYY
-	    scanner.nextLine();// go to the next line
-	    songList.add(new Song(songName, artist, album, seconds, year));
+	    String userName = scanner.nextLine(); // Parse the username
+	    String password = scanner.nextLine(); // Parse the password
+	    // TODO: parse shopping history
 	}
 	
 	scanner.close(); // release the file
-	return songList;
+	return customerList;
     }
     
     public void saveToFile(String filename, ArrayList<Song> songList) throws IOException
