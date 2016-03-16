@@ -2,13 +2,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CustomerDB {
-    public ArrayList<Customer> loadFromFile(string){
-	
-    }
 
     public ArrayList<Song> loadFromFile(String filename) throws FileNotFoundException{
 	// Open the file
-	scanner = new Scanner(new File(filename));
+	Scanner scanner = new Scanner(new File(filename));
 	
 	// Instantiate the song ArrayList
 	ArrayList<Customer> customerList = new ArrayList<>();
