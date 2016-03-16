@@ -3,10 +3,11 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
+import java.io.FileWriter;
 
 public class CustomerDB {
 
-    public ArrayList<Song> loadFromFile(String filename) throws FileNotFoundException{
+    public ArrayList<Customer> loadFromFile(String filename) throws FileNotFoundException{
 	// Open the file
 	Scanner scanner = new Scanner(new File(filename));
 	
@@ -24,13 +25,13 @@ public class CustomerDB {
 	return customerList;
     }
     
-    public void saveToFile(String filename, ArrayList<Song> songList) throws IOException
+    public void saveToFile(String filename, ArrayList<Customer> customerList) throws IOException
     {
     	FileWriter save = new FileWriter(filename);
     	// Loop through the list and print each element to file
-    	for(int i =0; i<songList.size(); i++)
+    	for(int i =0; i<customerList.size(); i++)
 	    {
-    		save.write(songList.get(i).toString());
+    		save.write(customerList.get(i).toString());
 	    }
     	save.close();//close the file
     }
