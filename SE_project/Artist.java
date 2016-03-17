@@ -41,7 +41,7 @@ public class Artist {
     public boolean equals(Object o){
     if(o instanceof Artist){
             Artist toCompare = (Artist) o;
-            String nameComp = toCompare.getName().replace("\\s+", "");
+            String nameComp = toCompare.getName().replaceAll("\\s+", "");
             String nameThisComp = name.replaceAll("\\s+", "");
             return nameThisComp.equals(nameComp);
         }
