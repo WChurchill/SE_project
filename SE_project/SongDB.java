@@ -56,6 +56,7 @@ public class SongDB {
     	}
     	save.close();//close the file
     }
+    
     public ArrayList<Album> albums (ArrayList<Song> songList){
         ArrayList<Album> albumList = new ArrayList<Album>();
         //ArrayList<Artist> artistList = new ArrayList<Artist>();
@@ -69,6 +70,12 @@ public class SongDB {
                 //System.out.println("New Album");
             }
             else if (albumList.contains(seek)){
+                for (int j = 0; j < albumList.size(); j++){
+                    if(albumList.get(j).getName().equals(songList.get(i).getAlbum())){
+                        seek = albumList.get(j);
+                        break;
+                    }
+                }
                 seek.addSong(songList.get(i));
                 //System.out.println("Already in list");
             }
@@ -87,6 +94,12 @@ public class SongDB {
                 seek.addAlbum(albumList.get(i));
             }
             else if(artistList.contains(seek)){
+                for (int j = 0; j < artistList.size(); j++){
+                    if(artistList.get(j).getName().equals(albumList.get(i).getArtist())){
+                        seek = artistList.get(j);
+                        break;
+                    }
+                }
                 seek.addAlbum(albumList.get(i));
             }
         }
