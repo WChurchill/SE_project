@@ -38,7 +38,7 @@ public class Album {
     
     @Override
     public String toString(){
-        String rep = ("\nName: " + this.name + "\nYear: " + this.year);
+        String rep = ("\nArtist: " + artist + "\nAlbum: " + this.name + "\nYear: " + this.year);
         for (int i = 0; i < Songs.size(); i++){
             rep+=("\n     Song: " + Songs.get(i).getName());
         }
