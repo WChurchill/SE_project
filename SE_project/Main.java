@@ -22,9 +22,9 @@ public class Main {
             Scanner input = new Scanner(System.in);     //input scanner
             int choice = 0;     //int for main menu choice
             int subChoice;      //int for sub-menu choice
-            for (int i = 0; i < Albums.size(); i++){
+            /*for (int i = 0; i < Albums.size(); i++){
                 System.out.print(Albums.get(i).toString());
-            }
+            }*/
             Logo();     //Display Logo
             do{         //Display main menu and take choice
                 mainMenu();         //Display main menu
