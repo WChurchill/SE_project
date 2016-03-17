@@ -108,4 +108,21 @@ public class Song {
     public int compareTo(Song o){
         return this.songName.compareTo(o.songName);
     }
+    
+    public boolean equals(Object o){
+        Song toCompare = (Song) o;
+        String compName = toCompare.getName().replaceAll("\\s+", "");
+        String compArtist = toCompare.getArtist().replaceAll("\\s+", "");
+        String compAlbum = toCompare.getArtist().replaceAll("\\s+", "");
+        
+        String thisName = songName.replaceAll("\\s+", "");
+        String thisArtist = artist.replaceAll("\\s+", "");
+        String thisAlbum = album.replaceAll("\\s+", "");
+        
+        if (compName.equals(thisName) && compArtist.equals(thisArtist) 
+            && compAlbum.equals(thisAlbum) && toCompare.getSeconds() == seconds && toCompare.getYear() == year)
+                return true;
+        
+        return false;
+    }
 }
