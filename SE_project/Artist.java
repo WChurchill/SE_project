@@ -30,14 +30,20 @@ public class Artist {
     
     @Override
     public String toString(){
-        return ("Artist: " + this.name);
+        String rep = ("Artist: " + this.name);
+        for (int i = 0; i < Albums.size(); i++){
+            rep+=("\n       Album: " + Albums.get(i).getName());
+        }
+        return rep;
     }
     
     @Override
     public boolean equals(Object o){
     if(o instanceof Artist){
             Artist toCompare = (Artist) o;
-            return this.name.equals(toCompare.name);
+            String nameComp = toCompare.getName().replace("\\s+", "");
+            String nameThisComp = name.replaceAll("\\s+", "");
+            return nameThisComp.equals(nameComp);
         }
     return false;
     }
