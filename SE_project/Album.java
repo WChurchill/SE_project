@@ -36,9 +36,37 @@ public class Album {
         Songs.add(addSong);
     }
     
+    public ArrayList<Song> getSongs(){
+        return this.Songs;
+    }
+    
+    public Song getSong(int i){
+        return Songs.get(i);
+    }
+    
+    public Song getSong(String songName){
+        for (int i = 0; i < Songs.size(); i++)
+            if (Songs.get(i).getName().equals(songName)){
+                return Songs.get(i);
+            }
+        return null;
+    }
+    
+    public String songsView(){
+        String songsView = "";
+        for(int i = 0; i < Songs.size(); i++)
+            songsView+=Songs.get(i).toLabeledString();
+        
+        return songsView;
+    }
+    
+    public String simpAlbum(){
+        return (this.name + ", " + this.year);
+    }
+    
     @Override
     public String toString(){
-        String rep = ("\nArtist: " + artist + "\nAlbum: " + this.name + "\nYear: " + this.year);
+        String rep = (/*"\nArtist: " + artist + */"\nAlbum: " + this.name + "\nYear: " + this.year);
         for (int i = 0; i < Songs.size(); i++){
             rep+=("\n     Song: " + Songs.get(i).getName());
         }
