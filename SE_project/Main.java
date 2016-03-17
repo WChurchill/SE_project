@@ -107,10 +107,28 @@ public class Main {
                         }
                     }
                     else if (subChoice ==2){
-                        System.out.println("Not Implemented");
+                        String albumSearch;  //String to hold song requested
+                        input.nextLine();   //Clear buffer
+                        System.out.print("Enter name of album: ");   //Prompt user for requested song
+                        albumSearch = input.nextLine();      //Take result
+                        Album result = searchAlbum(albumSearch, Albums);        //Run searchSong passing songSearch and Songs ArrayList
+                        if(result==null){
+                            System.out.println("Search Unsuccessful");
+                        }else{
+                            System.out.println(result.toString());
+                        }
                     }
                     else if (subChoice ==3){
-                        System.out.println("Not Implemented");
+                        String artistSearch;  //String to hold song requested
+                        input.nextLine();   //Clear buffer
+                        System.out.print("Enter name of artist: ");   //Prompt user for requested song
+                        artistSearch = input.nextLine();      //Take result
+                        Artist result = searchArtist(artistSearch, Artists);        //Run searchSong passing songSearch and Songs ArrayList
+                        if(result==null){
+                            System.out.println("Search Unsuccessful");
+                        }else{
+                            System.out.println(result.toString());
+                        }
                     }
                     break;
                 case 5:
@@ -167,6 +185,46 @@ public class Main {
             else if (songSearch.compareTo(Songs.get(mid).getName()) == 0){  //else if equal
                 //System.out.println("Song found!");      //Success message
                 return Songs.get(mid);      //return Song
+            }
+        }
+        
+        //System.out.println("Song not found");       //Failure message
+        return null;        //return null
+    }
+    
+    public static Album searchAlbum (String albumSearch, ArrayList<Album> Albums){
+        Albums.sort(new AlbumComparator());
+        int low = 0;        //initialize low to 0
+        int high = Albums.size()-1;  //initialize high to size of list minus 1
+        while (low <= high){        //while low is less than or equal to high
+            int mid = low + (high-low)/2;       //middle is high minus low divided by 2
+            if (albumSearch.compareTo(Albums.get(mid).getName()) < 0)     //if songSearch is less than tested mid name
+                high = mid - 1;     //high is middle minus 1
+            else if (albumSearch.compareTo(Albums.get(mid).getName()) > 0)    //if songSearch is higher than tested mid name
+                low = mid + 1;      //low is middle plus 1
+            else if (albumSearch.compareTo(Albums.get(mid).getName()) == 0){  //else if equal
+                //System.out.println("Song found!");      //Success message
+                return Albums.get(mid);      //return Song
+            }
+        }
+        
+        //System.out.println("Song not found");       //Failure message
+        return null;        //return null
+    }
+    
+    public static Artist searchArtist (String artistSearch, ArrayList<Artist> Artists){
+        Artists.sort(new ArtistComparator());
+        int low = 0;        //initialize low to 0
+        int high = Artists.size()-1;  //initialize high to size of list minus 1
+        while (low <= high){        //while low is less than or equal to high
+            int mid = low + (high-low)/2;       //middle is high minus low divided by 2
+            if (artistSearch.compareTo(Artists.get(mid).getName()) < 0)     //if songSearch is less than tested mid name
+                high = mid - 1;     //high is middle minus 1
+            else if (artistSearch.compareTo(Artists.get(mid).getName()) > 0)    //if songSearch is higher than tested mid name
+                low = mid + 1;      //low is middle plus 1
+            else if (artistSearch.compareTo(Artists.get(mid).getName()) == 0){  //else if equal
+                //System.out.println("Song found!");      //Success message
+                return Artists.get(mid);      //return Song
             }
         }
         
