@@ -24,16 +24,45 @@ public class Artist {
         return name;
     }
     
+    public Album getAlbum(String albumName){
+        for (int i = 0; i < Albums.size(); i++)
+            if (Albums.get(i).getName().equals(albumName)){
+                return Albums.get(i);
+            }
+        return null;
+    }
+    
+    public Album getAlbum(int i){
+        return Albums.get(i);
+    }
+    
+    public ArrayList <Album> getAlbums(){
+        return this.Albums;
+    }
+    
     public void addAlbum(Album addAlbum){
         Albums.add(addAlbum);
+    }
+    
+    public String albumsView(){
+        String albumList = "";
+        
+        for (int i = 0; i < Albums.size(); i++)
+            albumList+=(Albums.get(i).toString());
+        
+        return albumList;
+    }
+    
+    public String simpArtist(){
+        return(this.name);
     }
     
     @Override
     public String toString(){
         String rep = ("Artist: " + this.name);
-        for (int i = 0; i < Albums.size(); i++){
+        /*for (int i = 0; i < Albums.size(); i++){
             rep+=("\n       Album: " + Albums.get(i).getName());
-        }
+        }*/
         return rep;
     }
     
