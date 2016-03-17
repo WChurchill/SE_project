@@ -18,8 +18,9 @@ public class Album {
     private int year;
     private ArrayList <Song> Songs = new ArrayList<Song>();
     
-    public Album(String name, int year){
+    public Album(String name, String artist, int year){
         this.name = name;
+        this.artist = artist;
         this.year = year;
     }
     
@@ -44,7 +45,8 @@ public class Album {
     public boolean equals(Object o){
         if(o instanceof Album){
             Album toCompare = (Album) o;
-            return this.name.equals(toCompare.name);
+            if(this.name.equals(toCompare.name) && this.artist.equals(toCompare.artist))
+                return true;
         }
     return false;
     }
