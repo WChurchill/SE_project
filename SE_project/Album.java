@@ -38,15 +38,20 @@ public class Album {
     
     @Override
     public String toString(){
-        return ("\nName: " + this.name + "\nYear: " + this.year);
+        String rep = ("\nName: " + this.name + "\nYear: " + this.year);
+        for (int i = 0; i < Songs.size(); i++){
+            rep+=("\n     Song: " + Songs.get(i).getName());
+        }
+        return rep;
     }
     
     @Override
     public boolean equals(Object o){
         if(o instanceof Album){
             Album toCompare = (Album) o;
-            if(this.name.equals(toCompare.name) && this.artist.equals(toCompare.artist))
-                return true;
+            String nameComp = toCompare.getName().replaceAll("\\s+", "");
+            String nameThisComp = name.replaceAll("\\s+","");
+            return nameThisComp.equals(nameComp);
         }
     return false;
     }
