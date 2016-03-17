@@ -19,11 +19,11 @@ public class Main {
             Albums = main.albums(Songs);
             Artists = main.artists(Albums);
             
-            //Albums.sort(new AlbumComparator());
+            Albums.sort(new AlbumComparator());
             
-            /*for(int g = 0; g < Albums.size(); g++)
+            for(int g = 0; g < Albums.size(); g++)
                 System.out.println(Albums.get(g).toString());
-            
+            /*
             System.out.println();
             for(int h = 0; h < Songs.size(); h++)
                 System.out.println(Songs.get(h).toString());
@@ -190,16 +190,17 @@ public class Main {
     }
     
     public static Song searchSong(String songSearch, ArrayList<Song> Songs){        //searchSong will take String name of song and ArrayList of Songs and use
-        Songs.sort(new SongComparator());//Sort list using songComparator          //binary search to find and return song                
+        Songs.sort(new SongComparator());//Sort list using songComparator          //binary search to find and return song 
+        songSearch = songSearch.replaceAll("\\s+", "");
         int low = 0;        //initialize low to 0
         int high = Songs.size()-1;  //initialize high to size of list minus 1
         while (low <= high){        //while low is less than or equal to high
             int mid = low + (high-low)/2;       //middle is high minus low divided by 2
-            if (songSearch.compareTo(Songs.get(mid).getName()) < 0)     //if songSearch is less than tested mid name
+            if (songSearch.compareTo(Songs.get(mid).getName().replaceAll("\\s+", "")) < 0)     //if songSearch is less than tested mid name
                 high = mid - 1;     //high is middle minus 1
-            else if (songSearch.compareTo(Songs.get(mid).getName()) > 0)    //if songSearch is higher than tested mid name
+            else if (songSearch.compareTo(Songs.get(mid).getName().replaceAll("\\s+", "")) > 0)    //if songSearch is higher than tested mid name
                 low = mid + 1;      //low is middle plus 1
-            else if (songSearch.compareTo(Songs.get(mid).getName()) == 0){  //else if equal
+            else if (songSearch.compareTo(Songs.get(mid).getName().replaceAll("\\s+", "")) == 0){  //else if equal
                 //System.out.println("Song found!");      //Success message
                 return Songs.get(mid);      //return Song
             }
@@ -211,15 +212,16 @@ public class Main {
     
     public static Album searchAlbum (String albumSearch, ArrayList<Album> Albums){
         Albums.sort(new AlbumComparator());
+        albumSearch = albumSearch.replaceAll("\\s+", "");
         int low = 0;        //initialize low to 0
         int high = Albums.size()-1;  //initialize high to size of list minus 1
         while (low <= high){        //while low is less than or equal to high
             int mid = low + (high-low)/2;       //middle is high minus low divided by 2
-            if (albumSearch.compareTo(Albums.get(mid).getName()) < 0)     //if songSearch is less than tested mid name
+            if (albumSearch.compareTo(Albums.get(mid).getName().replaceAll("\\s+", "")) < 0)     //if songSearch is less than tested mid name
                 high = mid - 1;     //high is middle minus 1
-            else if (albumSearch.compareTo(Albums.get(mid).getName()) > 0)    //if songSearch is higher than tested mid name
+            else if (albumSearch.compareTo(Albums.get(mid).getName().replaceAll("\\s+", "")) > 0)    //if songSearch is higher than tested mid name
                 low = mid + 1;      //low is middle plus 1
-            else if (albumSearch.compareTo(Albums.get(mid).getName()) == 0){  //else if equal
+            else if (albumSearch.compareTo(Albums.get(mid).getName().replaceAll("\\s+", "")) == 0){  //else if equal
                 //System.out.println("Song found!");      //Success message
                 return Albums.get(mid);      //return Song
             }
@@ -231,15 +233,16 @@ public class Main {
     
     public static Artist searchArtist (String artistSearch, ArrayList<Artist> Artists){
         Artists.sort(new ArtistComparator());
+        artistSearch = artistSearch.replaceAll("\\s+", "");
         int low = 0;        //initialize low to 0
         int high = Artists.size()-1;  //initialize high to size of list minus 1
         while (low <= high){        //while low is less than or equal to high
             int mid = low + (high-low)/2;       //middle is high minus low divided by 2
-            if (artistSearch.compareTo(Artists.get(mid).getName()) < 0)     //if songSearch is less than tested mid name
+            if (artistSearch.compareTo(Artists.get(mid).getName().replaceAll("\\s+", "")) < 0)     //if songSearch is less than tested mid name
                 high = mid - 1;     //high is middle minus 1
-            else if (artistSearch.compareTo(Artists.get(mid).getName()) > 0)    //if songSearch is higher than tested mid name
+            else if (artistSearch.compareTo(Artists.get(mid).getName().replaceAll("\\s+", "")) > 0)    //if songSearch is higher than tested mid name
                 low = mid + 1;      //low is middle plus 1
-            else if (artistSearch.compareTo(Artists.get(mid).getName()) == 0){  //else if equal
+            else if (artistSearch.compareTo(Artists.get(mid).getName().replaceAll("\\s+", "")) == 0){  //else if equal
                 //System.out.println("Song found!");      //Success message
                 return Artists.get(mid);      //return Song
             }
