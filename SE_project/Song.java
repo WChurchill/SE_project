@@ -67,6 +67,10 @@ public class Song {
     public void setYear(int year) {
 	this.year = year;
     }
+    
+    public String simpSong(){
+        return this.songName;
+    }
 
     // Returns a string representation of a song in human readable format
     // with labeled attributes
