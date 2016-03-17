@@ -10,14 +10,31 @@ import java.io.FileNotFoundException;
 public class Main {
     public static void main(String[] args) {
         
-        ArrayList <Song> Songs = new ArrayList <Song>(0);
-        ArrayList <Album> Albums = new ArrayList <Album>(0);
-        ArrayList <Artist> Artists = new ArrayList <Artist>(0);
+        ArrayList <Song> Songs = new ArrayList <Song>();
+        ArrayList <Album> Albums = new ArrayList <Album>();
+        ArrayList <Artist> Artists = new ArrayList <Artist>();
         try{
             SongDB main = new SongDB();
             Songs = main.loadFromFile("songs.txt");
             Albums = main.albums(Songs);
             Artists = main.artists(Albums);
+            
+            //Albums.sort(new AlbumComparator());
+            
+            /*for(int g = 0; g < Albums.size(); g++)
+                System.out.println(Albums.get(g).toString());
+            
+            System.out.println();
+            for(int h = 0; h < Songs.size(); h++)
+                System.out.println(Songs.get(h).toString());
+            
+            System.out.println();
+            for(int i = 0; i < Artists.size(); i++){
+                //if(Artists.get(i).getName().equals("Korn "))
+                    System.out.println(Artists.get(i).toString());
+                //else
+                    //System.out.println("Mismatch");
+            }*/
             
             Scanner input = new Scanner(System.in);     //input scanner
             int choice = 0;     //int for main menu choice
