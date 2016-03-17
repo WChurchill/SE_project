@@ -62,7 +62,7 @@ public class SongDB {
         Album seek = null;
         
         for(int i = 0; i < songList.size(); i++){
-            seek = new Album(songList.get(i).getAlbum(), songList.get(i).getYear());
+            seek = new Album(songList.get(i).getAlbum(), songList.get(i).getArtist(), songList.get(i).getYear());
             if (!albumList.contains(seek)){
                 albumList.add(seek);
                 seek.addSong(songList.get(i));
