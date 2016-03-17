@@ -65,11 +65,13 @@ public class SongDB {
         for(int i = 0; i < songList.size(); i++){
             seek = new Album(songList.get(i).getAlbum(), songList.get(i).getArtist(), songList.get(i).getYear());
             if (!albumList.contains(seek)){
+                //System.out.println("New album");
                 albumList.add(seek);
                 seek.addSong(songList.get(i));
                 //System.out.println("New Album");
             }
             else if (albumList.contains(seek)){
+                //System.out.println("Existing album");
                 for (int j = 0; j < albumList.size(); j++){
                     if(albumList.get(j).getName().equals(songList.get(i).getAlbum())){
                         seek = albumList.get(j);
@@ -90,10 +92,12 @@ public class SongDB {
         for(int i = 0; i < albumList.size(); i++){
             seek = new Artist(albumList.get(i).getArtist());
             if(!artistList.contains(seek)){
+                //System.out.println("New artist");
                 artistList.add(seek);
                 seek.addAlbum(albumList.get(i));
             }
             else if(artistList.contains(seek)){
+                //System.out.println("Existing Artist");
                 for (int j = 0; j < artistList.size(); j++){
                     if(artistList.get(j).getName().equals(albumList.get(i).getArtist())){
                         seek = artistList.get(j);
