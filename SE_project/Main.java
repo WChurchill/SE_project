@@ -21,7 +21,7 @@ public class Main {
             
             Albums.sort(new AlbumComparator());
             
-            for(int g = 0; g < Albums.size(); g++)
+            /*for(int g = 0; g < Albums.size(); g++)
                 System.out.println(Albums.get(g).toString());
             /*
             System.out.println();
@@ -158,7 +158,7 @@ public class Main {
                 } while(choice != 0);       //while choice is not to exit    
            }
        catch (FileNotFoundException e){
-           System.out.println("error");
+           System.out.println("Error: File does not exist. Exiting program...");
            System.exit(0);
        }
     }
