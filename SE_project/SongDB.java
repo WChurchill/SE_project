@@ -45,6 +45,68 @@ public class SongDB {
 	scanner.close(); // release the file
 	return songList;
     }
+        
+    public ArrayList<Album> albums (ArrayList<Song> songList){
+        ArrayList<Album> albums = new ArrayList<Album>();
+        //ArrayList<Artist> artistList = new ArrayList<Artist>();
+        Album seek = null;
+        
+        for(int i = 0; i < songList.size(); i++){
+            seek = new Album(songList.get(i).getAlbum(), songList.get(i).getArtist(), songList.get(i).getYear());
+            if (!albums.contains(seek)){
+                //System.out.println("New album");
+                albums.add(seek);
+                seek.addSong(songList.get(i));
+                //System.out.println("New Album");
+            }
+            else if (albums.contains(seek)){
+                //System.out.println("Existing album");
+                for (int j = 0; j < albums.size(); j++){
+                    if(albums.get(j).getName().equals(songList.get(i).getAlbum())){
+                        seek = albums.get(j);
+                        break;
+                    }
+                }
+                seek.addSong(songList.get(i));
+                //System.out.println("Already in list");
+            }
+        }
+        return albums;
+    }
+    
+    public ArrayList<Artist> artists (String fileName){
+        try{
+            ArrayList<Song> songList = loadFromFile(fileName);
+            ArrayList<Album> albumList = albums(songList);
+            ArrayList<Artist> artistList = new ArrayList<Artist>();
+           
+            Artist seek = null;
+
+            for(int i = 0; i < albumList.size(); i++){
+                seek = new Artist(albumList.get(i).getArtist());
+                if(!artistList.contains(seek)){
+                    //System.out.println("New artist");
+                    artistList.add(seek);
+                    seek.addAlbum(albumList.get(i));
+                }
+                else if(artistList.contains(seek)){
+                    //System.out.println("Existing Artist");
+                    for (int j = 0; j < artistList.size(); j++){
+                        if(artistList.get(j).getName().equals(albumList.get(i).getArtist())){
+                            seek = artistList.get(j);
+                            break;
+                        }
+                    }
+                    seek.addAlbum(albumList.get(i));
+                }
+            }
+        return artistList;
+        } catch(FileNotFoundException e){
+            System.out.println("Error: File does not exist. Exiting...");
+            System.exit(0);
+        }
+        return null;
+    }
     
     public void saveToFile(String filename, ArrayList<Song> songList) throws IOException
     {
@@ -57,56 +119,4 @@ public class SongDB {
     	save.close();//close the file
     }
     
-    public ArrayList<Album> albums (ArrayList<Song> songList){
-        ArrayList<Album> albumList = new ArrayList<Album>();
-        //ArrayList<Artist> artistList = new ArrayList<Artist>();
-        Album seek = null;
-        
-        for(int i = 0; i < songList.size(); i++){
-            seek = new Album(songList.get(i).getAlbum(), songList.get(i).getArtist(), songList.get(i).getYear());
-            if (!albumList.contains(seek)){
-                //System.out.println("New album");
-                albumList.add(seek);
-                seek.addSong(songList.get(i));
-                //System.out.println("New Album");
-            }
-            else if (albumList.contains(seek)){
-                //System.out.println("Existing album");
-                for (int j = 0; j < albumList.size(); j++){
-                    if(albumList.get(j).getName().equals(songList.get(i).getAlbum())){
-                        seek = albumList.get(j);
-                        break;
-                    }
-                }
-                seek.addSong(songList.get(i));
-                //System.out.println("Already in list");
-            }
-        }
-        return albumList;
-    }
-    
-    public ArrayList<Artist> artists (ArrayList<Album> albumList){
-        ArrayList<Artist> artistList = new ArrayList<Artist>();
-        Artist seek = null;
-        
-        for(int i = 0; i < albumList.size(); i++){
-            seek = new Artist(albumList.get(i).getArtist());
-            if(!artistList.contains(seek)){
-                //System.out.println("New artist");
-                artistList.add(seek);
-                seek.addAlbum(albumList.get(i));
-            }
-            else if(artistList.contains(seek)){
-                //System.out.println("Existing Artist");
-                for (int j = 0; j < artistList.size(); j++){
-                    if(artistList.get(j).getName().equals(albumList.get(i).getArtist())){
-                        seek = artistList.get(j);
-                        break;
-                    }
-                }
-                seek.addAlbum(albumList.get(i));
-            }
-        }
-        return artistList;
-    }
 }
