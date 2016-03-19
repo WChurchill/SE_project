@@ -24,6 +24,10 @@ public class Artist {
         return name;
     }
     
+    public ArrayList <Album> getAlbums(){
+        return this.Albums;
+    }
+    
     public Album getAlbum(String albumName){
         for (int i = 0; i < Albums.size(); i++)
             if (Albums.get(i).getName().equals(albumName)){
@@ -35,15 +39,36 @@ public class Artist {
     public Album getAlbum(int i){
         return Albums.get(i);
     }
-    
-    public ArrayList <Album> getAlbums(){
-        return this.Albums;
-    }
-    
+        
     public void addAlbum(Album addAlbum){
         Albums.add(addAlbum);
     }
     
+    public boolean deleteAlbum(String albumDelete){
+        boolean found = false;
+        Album albumToDelete = null;
+        
+        for (int i = 0; i < Albums.size(); i++){
+            if (Albums.get(i).getName().equals(albumDelete)){
+                albumToDelete = Albums.get(i);
+                Albums.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void clearAlbums(){
+        this.Albums.clear();
+    }
+    
+    public void changeArtist(String newArtist){
+        for (int i = 0; i < Albums.size(); i++){
+            Albums.get(i).changeArtist(newArtist);
+        }
+        this.name = newArtist;
+    }
+        
     public String albumsView(){
         String albumList = "";
         
