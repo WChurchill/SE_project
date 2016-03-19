@@ -32,10 +32,10 @@ public class Album {
         return this.artist;
     }
     
-    public void addSong(Song addSong){
-        Songs.add(addSong);
+    public int getYear(){
+        return this.year;
     }
-    
+         
     public ArrayList<Song> getSongs(){
         return this.Songs;
     }
@@ -52,6 +52,44 @@ public class Album {
         return null;
     }
     
+    public void addSong(Song addSong){
+        Songs.add(addSong);
+    }
+
+    public boolean deleteSong(String songDelete){
+        boolean found = false;
+        Song songToDelete = null;
+        
+        for (int i = 0; i < Songs.size(); i++){
+            if (Songs.get(i).getName().equals(songDelete)){
+                songToDelete = Songs.get(i);
+                Songs.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void clearSongs(){
+        Songs.clear();
+    }
+        
+    public void changeArtist(String newArtist){
+        for(int i = 0; i < Songs.size(); i++)
+            Songs.get(i).setArtist(newArtist);
+        this.artist = newArtist;
+    }
+    
+    public void changeName(String newName){
+        for(int i = 0; i < Songs.size(); i++)
+            Songs.get(i).setAlbum(newName);
+        this.name = newName;
+    }
+    
+    public void changeYear(int newYear){
+        this.year = newYear;
+    }
+    
     public String songsView(){
         String songsView = "";
         for(int i = 0; i < Songs.size(); i++)
@@ -66,7 +104,7 @@ public class Album {
     
     @Override
     public String toString(){
-        String rep = (/*"\nArtist: " + artist + */"\nAlbum: " + this.name + "\nYear: " + this.year);
+        String rep = ("\nArtist: " + artist + "\nAlbum: " + this.name + "\nYear: " + this.year);
         for (int i = 0; i < Songs.size(); i++){
             rep+=("\n     Song: " + Songs.get(i).getName());
         }
