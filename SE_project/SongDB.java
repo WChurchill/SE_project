@@ -14,7 +14,6 @@ public class SongDB {
 	
     }
 
-
     public ArrayList<Song> loadFromFile(String filename) throws FileNotFoundException{
 	// Open the file
 	scanner = new Scanner(new File(filename));
@@ -46,7 +45,7 @@ public class SongDB {
 	return songList;
     }
         
-    public ArrayList<Album> albums (ArrayList<Song> songList){
+    private ArrayList<Album> albums (ArrayList<Song> songList){
         ArrayList<Album> albums = new ArrayList<Album>();
         //ArrayList<Artist> artistList = new ArrayList<Artist>();
         Album seek = null;
@@ -100,6 +99,15 @@ public class SongDB {
                     seek.addAlbum(albumList.get(i));
                 }
             }
+        
+        for (int i = 0; i < artistList.size(); i++){
+            for (int j = 0; j < artistList.get(i).getAlbums().size(); j++)
+                artistList.get(i).getAlbum(j).getSongs().sort(new SongComparator());
+            artistList.get(i).getAlbums().sort(new AlbumTimeComparator());
+        }
+        
+        artistList.sort(new ArtistComparator());
+            
         return artistList;
         } catch(FileNotFoundException e){
             System.out.println("Error: File does not exist. Exiting...");
