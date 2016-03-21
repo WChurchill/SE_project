@@ -9,10 +9,11 @@ import java.util.Calendar;
 import java.io.FileNotFoundException;
 
 public class Main {
+    static final int curYear = Calendar.getInstance().get(Calendar.YEAR);
+    static final int tooOld = curYear - 100;
+    static final int tooNew = curYear + 10;
+
     public static void main(String[] args) {
-        final int curYear = Calendar.getInstance().get(Calendar.YEAR);
-        final int tooOld = curYear - 100;
-        
         ArrayList <Artist> Artists = new ArrayList <Artist>();
         
         SongDB main = new SongDB();
@@ -117,6 +118,7 @@ public class Main {
         Artist addArtist = null;
         Album addAlbum = null;
         
+        boolean newArtist = false;
         String name;
         String album;
         String artist;
@@ -137,70 +139,115 @@ public class Main {
         input.nextLine();
         artist = input.nextLine();
         addArtist = new Artist (artist);
-        if (!Artists.contains(addArtist)){
-            System.out.println("Artist doesn't exist. Returning...");
-            return;
-        }
-        else
-            addArtist = searchArtist(artist, Artists);
+        while (!Artists.contains(addArtist)){
+            int choice;
+            System.out.print("Artist does not exist. Enter 1 to create new Artist for this Song, 0 to exit, any other number to try again: ");
+            choice = input.nextInt();
+            if (choice == 0){
+                System.out.println("Returning to menu...");
+                return;
+            }
+            else if (choice == 1){
+                newArtist = true;
+                addArtist(artist, Artists);
+                System.out.println("Artist created!");
+                addArtist = searchArtist(artist, Artists);
+            }
+            else{
+                System.out.print("Enter new Artist for Song: ");
+                input.nextLine();
+                artist = input.nextLine();
+                addArtist = new Artist(artist);
+            }
+        }  
         
         System.out.println("+----------+"
                        + "\n|Album List|" 
                        + "\n+----------+");
         System.out.println("|Artist: " + artist);
-        
+
         for(Album alb: addArtist.getAlbums())
                 System.out.println(alb.simpAlbum());
-        
+
         System.out.println();
-        
+        input.nextLine();
         System.out.print("Enter Album name: ");
         album = input.nextLine();
         System.out.print("Enter Album Year: ");
         albumYear = input.nextInt();
-        addAlbum = new Album (album, artist, albumYear);
-        
-        if (!addArtist.getAlbums().contains(addAlbum)){
-            System.out.println("Album doesn't exist. Returning...");
-            return;
+        while (albumYear < tooOld || albumYear > tooNew){
+            System.out.print("Album year must be between the year " + tooOld + " and the year " + tooNew + ". Try again: ");
+            albumYear = input.nextInt();
         }
-        else {
-            addAlbum = addArtist.getAlbum(album);
-            input.nextLine();
-            
-            System.out.println("+---------+"
-                            +"\n|Song list|"
-                            +"\n+---------+");
-            System.out.println("|Artist: " + artist + "\n|Album: " + addAlbum.simpAlbum());
-            
-            for(Song song: addAlbum.getSongs())
-                System.out.println(song.simpSong());
-            
-            System.out.println();
-            
-            System.out.print("Enter Song name: ");
-            name = input.nextLine();
-            System.out.print("Enter Year of Release: ");
-            songYear = input.nextInt();
-            input.nextLine();
-            System.out.print("Enter Time of song (in MM:SS): ");
-            time = input.nextLine();
-            int splitIndex = time.indexOf(":");
-            assert(time.length()>2);
-            assert(splitIndex>0);
-            assert(splitIndex<time.length()-2);
-            int minutes = Integer.parseInt(time.substring(0,splitIndex)); // Parse the minutes
-            int seconds = Integer.parseInt(time.substring(splitIndex+1)); // Parse seconds
-            seconds+=minutes*60; // convert minutes into seconds and add to seconds
+        if (newArtist){
+            addArtist.addAlbum(new Album(album, artist, albumYear));
+        }
 
-            if (addAlbum.getSong(name) != null){
-                System.out.println("Song already exists. Returning...");
+        addAlbum = new Album (album, artist, albumYear);
+
+        while (!addArtist.getAlbums().contains(addAlbum)){
+            int twoChoice;
+            System.out.print("Album does not exist. Enter 1 to create new Album for this Song, 0 to exit, any other number to try again: ");
+            input.nextLine();
+            twoChoice = input.nextInt();
+            if (twoChoice == 0){
+                System.out.println("Returning to menu...");
                 return;
             }
+            else if (twoChoice == 1){
+                newArtist = true;
+                addArtist.addAlbum(addAlbum);
+                System.out.println("Album created!");
+                addAlbum = addArtist.getAlbum(album);
+            }
             else{
-                addAlbum.addSong(new Song (name, album, artist, seconds, songYear));
+                System.out.print("Enter Album for Song: ");
+                input.nextLine();
+                album = input.nextLine();
+                addAlbum = new Album (album, artist, albumYear);
             }
         }
+
+        addAlbum = addArtist.getAlbum(album);
+        input.nextLine();
+
+        System.out.println("+---------+"
+                        +"\n|Song list|"
+                        +"\n+---------+");
+        System.out.println("|Artist: " + artist + "\n|Album: " + addAlbum.simpAlbum());
+
+        for(Song song: addAlbum.getSongs())
+            System.out.println(song.simpSong());
+
+        System.out.println();
+
+        System.out.print("Enter Song name: ");
+        name = input.nextLine();
+        System.out.print("Enter Year of Release: ");
+        songYear = input.nextInt();
+        while (songYear < tooOld || songYear > addAlbum.getYear()){
+            System.out.print("Year of song must be between " + tooOld + " and album release year "  + addAlbum.getYear() + ". Please try again: ");
+            songYear = input.nextInt();
+        }
+
+        input.nextLine();
+        System.out.print("Enter Time of song (in MM:SS): ");
+        time = input.nextLine();
+        int splitIndex = time.indexOf(":");
+        assert(time.length()>2);
+        assert(splitIndex>0);
+        assert(splitIndex<time.length()-2);
+        int minutes = Integer.parseInt(time.substring(0,splitIndex)); // Parse the minutes
+        int seconds = Integer.parseInt(time.substring(splitIndex+1)); // Parse seconds
+        seconds+=minutes*60; // convert minutes into seconds and add to seconds
+
+        if (addAlbum.getSong(name) != null){
+            System.out.println("Song already exists. Returning...");
+            return;
+        }
+        else{
+            addAlbum.addSong(new Song (name, album, artist, seconds, songYear));
+        } 
     }
         
     public static void addAlbum(Scanner input, ArrayList <Artist> Artists){
@@ -223,33 +270,47 @@ public class Main {
         artistName = input.nextLine();
         artistAdd = new Artist(artistName);
         
-        if (!Artists.contains(artistAdd)){
-            System.out.println("Artist doesn't exist. Please add artist first. Returning...");
-            return;
-        }
-        else if (Artists.contains(artistAdd)){
-            artistAdd = searchArtist(artistName, Artists);
-            
-            System.out.println("+----------+"
-                           + "\n|Album List|" 
-                           + "\n+----------+");
-            System.out.println("|Artist: " + artistName);
-            for(Album alb: artistAdd.getAlbums())
-                System.out.println(alb.simpAlbum());
-            
-            System.out.println();
-            
-            System.out.print("Enter name of new album: ");
-            input.nextLine();
-            albumName = input.nextLine();
-            if(artistAdd.getAlbum(albumName)!= null){
-                System.out.println("Album already exists. Returning...");
+        while (!Artists.contains(artistAdd)){
+            int choice;
+            System.out.print("Artist does not exist. Enter 1 to create new Artist for this Album, 0 to exit, any other number to try again: ");
+            choice = input.nextInt();
+            if (choice == 0){
+                System.out.println("Returning to menu...");
                 return;
             }
-            System.out.print("Enter year of release of album: ");
-            albumYear = input.nextInt();
-            artistAdd.addAlbum(new Album(albumName, artistName, albumYear));
+            else if (choice == 1){
+                addArtist(artistName, Artists);
+                System.out.println("Artist created!");
+                artistAdd = searchArtist(artistName, Artists);
+            }
+            else{
+                System.out.print("Enter Artist for Album: ");
+                input.nextLine();
+                artistName = input.nextLine();
+                artistAdd = new Artist(artistName);
+            }
         }
+        artistAdd = searchArtist(artistName, Artists);
+
+        System.out.println("+----------+"
+                       + "\n|Album List|" 
+                       + "\n+----------+");
+        System.out.println("|Artist: " + artistName);
+        for(Album alb: artistAdd.getAlbums())
+            System.out.println(alb.simpAlbum());
+
+        System.out.println();
+
+        System.out.print("Enter name of new album: ");
+        input.nextLine();
+        albumName = input.nextLine();
+        if(artistAdd.getAlbum(albumName)!= null){
+            System.out.println("Album already exists. Returning...");
+            return;
+        }
+        System.out.print("Enter year of release of album: ");
+        albumYear = input.nextInt();
+        artistAdd.addAlbum(new Album(albumName, artistName, albumYear));
     }
     
     public static void addArtist(String newArtist, ArrayList <Artist> Artists){
@@ -393,6 +454,10 @@ public class Main {
             else{
                 System.out.print("Enter new Year of Release: ");
                 newYear = input.nextInt(); 
+                while (newYear < tooOld || newYear > tooNew){
+                    System.out.print("Album year must be between the year " + tooOld + " and the year " + tooNew + ". Try again: ");
+                    newYear = input.nextInt();
+                }
             }
             System.out.print("Enter 0 to CLEAR Songs, any other number to keep songs: ");
             keepChoice = input.nextInt();
