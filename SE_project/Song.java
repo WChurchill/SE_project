@@ -89,7 +89,6 @@ public class Song {
     	songString+= "  Year:\t"+year;
     	return songString;
     }
-
     
     //toString override
     public String toString()
