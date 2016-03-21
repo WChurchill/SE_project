@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package SE_project;
 import java.util.*;
 /**
  *
@@ -12,7 +12,7 @@ import java.util.*;
 public class Customer {
     private String username;
     private String password; 
-    LinkedList<ShoppingCart> history=new LinkedList<>();
+    LinkedList<ShoppingCart> history=new LinkedList();
     
     Customer(){}
     

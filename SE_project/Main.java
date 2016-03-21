@@ -179,8 +179,6 @@ public class Main {
 
         System.out.println();       //newLine
         
-        input.nextLine();
-        
         //Get album name and year from user
         System.out.print("Enter Album name: ");     
         album = input.nextLine();
