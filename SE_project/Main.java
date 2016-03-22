@@ -14,10 +14,10 @@ public class Main {
     static final int tooNew = curYear + 10;         //static final int tooNew is curYear plus 10 signifies upper boundary of song and album years
 
     public static void main(String[] args) {
-        ArrayList <Artist> Artists = new ArrayList <Artist>();      //initialize new ArrayList <Artist> Artists which will hold all artists, albums, and songs
-        SongDB main = new SongDB();     //initialize new SongDB main which will be used to fill Artists with all items
-        Artists = main.artists("songs.txt");        //Artists equals the ArrayList<Artist> returned by main.artists passing file name "songs.txt" 
-        Artists.sort(new ArtistComparator());       //sort Artists using ArtistComparator
+       //ArrayList <Artist> Artists = new ArrayList <Artist>();      //initialize new ArrayList <Artist> Artists which will hold all artists, albums, and songs
+        SongDB main = new SongDB("songs.txt");     //initialize new SongDB main which will be used to fill Artists with all items
+        //Artists = main.artists("songs.txt");        //Artists equals the ArrayList<Artist> returned by main.artists passing file name "songs.txt" 
+        //Artists.sort(new ArtistComparator());       //sort Artists using ArtistComparator
         Scanner input = new Scanner(System.in);     //input scanner
         int choice = 0;     //int for main menu choice
         int subChoice;      //int for sub-menu choice
@@ -34,16 +34,16 @@ public class Main {
 
             switch (choice) {       //switch case to process main menu choice
             case 1:
-                addController(input, Artists);      //call addController passing input scanner and Artists
+                addController(main, input);      //call addController passing input scanner and Artists
                 break;
             case 2:
-                editController(input, Artists);     //call editController passing input scanner and Artists
+                editController(main, input);     //call editController passing input scanner and Artists
                 break;
             case 3:
-                deleteController(input, Artists);   //call deleteController passing input scanner and Artists    
+                deleteController(main, input);   //call deleteController passing input scanner and Artists    
                 break;
             case 4:
-                searchController(input, Artists);   //call searchController passing input scanner and Artists
+                searchController(main, input);   //call searchController passing input scanner and Artists
                 break;
             case 5:
                 System.out.println("Not Implemented");
@@ -83,7 +83,7 @@ public class Main {
     
     //addController is a static void taking Scanner input, ArrayList<Artist> Artists, will call to addSong, addAlbum, or addArtist 
     //based on choice by user, and these sub-functions will add a song, album, or artist, respectively
-    public static void addController(Scanner input, ArrayList <Artist> Artists){        
+    public static void addController(SongDB main, Scanner input){        
         int choice;         //int to hold choice  
         choiceMenu();       //display choice menu
         choice = input.nextInt();       //take choice from user
@@ -94,9 +94,9 @@ public class Main {
         if (choice == 0)        //if choice is zero
             return;     //return to menu
         else if (choice == 1)   //if choice is one
-            addSong(input, Artists);        //call to addSong passing input scanner and Artists
+            main.addSong(input, main.Artists);        //call to addSong passing input scanner and Artists
         else if (choice == 2)   //if choice is two
-            addAlbum(input, Artists);       //call to addAlbum passing input scanner and Artists
+            main.addAlbum(input, main.Artists);       //call to addAlbum passing input scanner and Artists
         else if (choice == 3){      //if choice is three
             String newArtist;       //String to hold name of new artist
             
@@ -104,7 +104,7 @@ public class Main {
             System.out.println("+-----------+"
                            + "\n|Artist List|" 
                            + "\n+-----------+");
-            for(Artist art: Artists)
+            for(Artist art: main.getArtists())
                 System.out.println(art.simpArtist());
 
             System.out.println();       //newLine
@@ -112,13 +112,544 @@ public class Main {
             //Get name of new Artist from user and call addArtist passing newArtist String and Artists list, this will create new artist in Artists
             System.out.print("Enter Name of Artist: ");     
             newArtist = input.nextLine();
-            addArtist(newArtist, Artists);
+            main.addArtist(newArtist, main.Artists);
         }
+    }
+    
+    public static void editController(SongDB main, Scanner input){
+        choiceMenu();
+        int choice = input.nextInt();
+        while (choice < 0 || choice > 3){     //validate sub-choice between 1-3 inclusive
+                    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
+                    choice = input.nextInt();
+                }
+        if (choice == 0)
+            return;
+        else if (choice == 1)
+            main.editSong(input, main.Artists);
+        else if (choice == 2)
+            main.editAlbum(input, main.Artists);
+        else if (choice == 3)
+            main.editArtist(input, main.Artists);
+    }
+    
+    public static void deleteController(SongDB main, Scanner input){
+        choiceMenu();
+        int choice;
+        int nextChoice; 
+        int delMethod ;
+        ArrayList <Integer> delChoices = new ArrayList<>();
+        
+        choice = input.nextInt();
+        while (choice < 0 || choice > 3){     //validate sub-choice between 1-3 inclusive
+                    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
+                    choice = input.nextInt();
+                }
+        if (choice == 0)
+            return;
+        else if (choice == 1){
+            System.out.print("Enter 1 to delete Song(s) by name, 2 to delete Song(s) by Album, 3 to delete Songs(s) by Artist: ");
+            delMethod= input.nextInt();
+            while(delMethod < 1 || delMethod >3){
+                System.out.print("Invalid. Try again: ");
+                delMethod = input.nextInt();
+            }
+            if (delMethod == 1){
+                int songNum = 0;
+                int songChoice = -4;
+                String songDelete;
+                ArrayList <Song> songsFound = new ArrayList<>();
+                ArrayList <Song> songsToDelete = new ArrayList<>();
+                System.out.print("Enter name of song(s) to delete: ");
+                input.nextLine();
+                songDelete = input.nextLine();
+                songsFound = main.searchSongs(songDelete, main.Artists);
+                while (songsFound.isEmpty()){
+                    System.out.print("Song(s) not found. Enter 0 to exit, any other number to try again: ");
+                    nextChoice = input.nextInt();
+                    if (choice == 0){
+                        System.out.println("Returning to menu...");
+                        return;
+                    }
+                    else{
+                        System.out.print("Enter name of Song(s) to delete: ");
+                        input.nextLine();
+                        songDelete = input.nextLine();
+                        songsFound = main.searchSongs(songDelete, main.Artists);
+                    }
+                }
+
+                for(int i = 0; i < songsFound.size(); i++){
+                    songNum++;
+                    System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                }
+
+                System.out.println("Enter number of song to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
+                while (songChoice != -2){
+                    System.out.print("Delete/Restore Song#:");
+                    songChoice = input.nextInt();
+                    while(songChoice < -3 || songChoice > songNum){
+                        System.out.print("Invalid. Try again: ");
+                        songChoice = input.nextInt();
+                    }
+                    if (songChoice == -2){
+                        break;
+                    }
+                    else if (songChoice == -3){
+                        for (int j = 0; j < songNum; j++){
+                            if (delChoices.contains(j))
+                                delChoices.remove(j);
+                            delChoices.add(j);
+                        }
+                        for(int i = 0; i < songsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
+                            else
+                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                        }
+                    }
+                    else{
+                        if (delChoices.contains(songChoice))
+                            delChoices.remove(songChoice);
+                        else
+                            delChoices.add(songChoice);
+                        for(int i = 0; i < songsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
+                            else
+                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                        }
+                    }
+                }
+                delChoices.sort(new IntComparator());
+                for(int i= 0; i < delChoices.size(); i++)
+                    songsToDelete.add(songsFound.get(delChoices.get(i)));
+                for(int j = 0; j < songsToDelete.size(); j++)
+                    main.deleteSong(songsToDelete.get(j), main.Artists);
+                System.out.println("Operation complete...");
+            }
+            else if(delMethod == 2){
+                int albumNum = 0;
+                int albumChoice;
+                int songNum = 0;
+                int songChoice = -4;
+                String fromAlbumDelete;
+                ArrayList <Song> songsFound = new ArrayList<>();
+                ArrayList <Song> songsToDelete = new ArrayList<>();
+                ArrayList <Album> albumsFound = new ArrayList<>();
+                Album albumFromDelete = null;
+                
+                System.out.print("Enter name of album to delete songs from: ");
+                input.nextLine();
+                fromAlbumDelete = input.nextLine();
+                albumsFound = main.searchAlbums(fromAlbumDelete, main.Artists);
+                while (albumsFound.isEmpty()){
+                    System.out.print("Album not found. Enter 0 to exit, any other number to try again: ");
+                    nextChoice = input.nextInt();
+                    if (choice == 0){
+                        System.out.println("Returning to menu...");
+                        return;
+                    }
+                    else{
+                        System.out.print("Enter name of album to delete songs from: ");
+                        input.nextLine();
+                        fromAlbumDelete = input.nextLine();
+                        albumsFound = main.searchAlbums(fromAlbumDelete, main.Artists);
+                    }
+                }
+                
+                for(int j = 0; j < albumsFound.size(); j++){
+                    albumNum++;
+                    System.out.println("(" + j + ") " + albumsFound.get(j).simpAlbum());
+                }
+                
+                System.out.print("Enter number of album to delete songs from, -1 to exit: ");
+                albumChoice = input.nextInt();
+                while(albumChoice < -1 || albumChoice > albumNum){
+                    System.out.print("Invalid. Try again: ");
+                    albumChoice = input.nextInt();
+                }
+                if (albumChoice == -1){
+                    System.out.println("Returning to menu...");
+                    return;
+                }
+                
+                albumFromDelete = albumsFound.get(albumChoice);
+                songsFound = albumFromDelete.getSongs();
+                
+
+                for(int i = 0; i < songsFound.size(); i++){
+                    songNum++;
+                    System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                }
+
+                System.out.println("Enter number of song to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
+                while (songChoice != -2){
+                    System.out.print("Delete/Restore Song#:");
+                    songChoice = input.nextInt();
+                    while(songChoice < -3 || songChoice > songNum){
+                        System.out.print("Invalid. Try again: ");
+                        songChoice = input.nextInt();
+                    }
+                    if (songChoice == -2){
+                        break;
+                    }
+                    else if (songChoice == -3){
+                        for (int j = 0; j < songNum; j++){
+                            if (delChoices.contains(j))
+                                delChoices.remove(j);
+                            delChoices.add(j);
+                        }
+                        for(int i = 0; i < songsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
+                            else
+                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                        }
+                    }
+                    else{
+                        if (delChoices.contains((Integer)songChoice))
+                            delChoices.remove((Integer)songChoice);
+                        else
+                            delChoices.add(songChoice);
+                        for(int i = 0; i < songsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
+                            else
+                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                        }
+                    }
+                }
+                delChoices.sort(new IntComparator());
+                for(int i= 0; i < delChoices.size(); i++)
+                    songsToDelete.add(songsFound.get(delChoices.get(i)));
+                for(int j = 0; j < songsToDelete.size(); j++)
+                    main.deleteSong(songsToDelete.get(j), main.Artists);
+                System.out.println("Operation complete...");
+            }
+            else if(delMethod == 3){
+                int songNum = 0;
+                int songChoice = -4;
+                String fromArtistDelete;
+                Artist artistFromDelete = null;
+                ArrayList <Song> songsFound = new ArrayList<>();
+                ArrayList <Song> songsToDelete = new ArrayList<>();
+                
+                                
+                System.out.print("Enter name of Artist to delete songs from: ");
+                input.nextLine();
+                fromArtistDelete = input.nextLine();
+                artistFromDelete = main.searchArtist(fromArtistDelete, main.Artists);
+                while(artistFromDelete == null){
+                    int tryAgain;
+                    System.out.print("Artist not found. Press 0 to exit, any other number to try again: ");
+                    tryAgain = input.nextInt();
+                    if (tryAgain == 0)
+                        return;
+                    else{
+                        System.out.print("Enter name of Artist to delete songs from: ");
+                        fromArtistDelete=input.nextLine();
+                        artistFromDelete = main.searchArtist(fromArtistDelete, main.Artists);
+                    }
+                }
+                for (int i = 0; i < artistFromDelete.getAlbums().size(); i++){
+                    for(int j = 0; j < artistFromDelete.getAlbum(i).getSongs().size(); j++)
+                        songsFound.add(artistFromDelete.getAlbum(i).getSong(j));
+                }
+                
+                for(int i = 0; i < songsFound.size(); i++){
+                    songNum++;
+                    System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                }
+
+                System.out.println("Enter number of song to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
+                while (songChoice != -2){
+                    System.out.print("Delete/Restore Song#:");
+                    songChoice = input.nextInt();
+                    while(songChoice < -3 || songChoice > songNum){
+                        System.out.print("Invalid. Try again: ");
+                        songChoice = input.nextInt();
+                    }
+                    if (songChoice == -2){
+                        break;
+                    }
+                    else if (songChoice == -3){
+                        for (int j = 0; j < songNum; j++){
+                            if (delChoices.contains(j))
+                                delChoices.remove(j);
+                            delChoices.add(j);
+                        }
+                        for(int i = 0; i < songsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
+                            else
+                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                        }
+                    }
+                    else{
+                        if (delChoices.contains((Integer)songChoice))
+                            delChoices.remove((Integer)songChoice);
+                        else
+                            delChoices.add(songChoice);
+                        for(int i = 0; i < songsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
+                            else
+                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
+                        }
+                    }
+                }
+                delChoices.sort(new IntComparator());
+                for(int i= 0; i < delChoices.size(); i++)
+                    songsToDelete.add(songsFound.get(delChoices.get(i)));
+                for(int j = 0; j < songsToDelete.size(); j++)
+                    main.deleteSong(songsToDelete.get(j), main.Artists);
+                System.out.println("Operation complete...");
+            }    
+        }
+        
+        else if (choice == 2){
+            System.out.print("Enter 1 to delete Album(s) by name, 2 to delete Album(s) by Artist: ");
+            delMethod = input.nextInt();
+            while(delMethod < 1 || delMethod > 2){
+                System.out.print("Invalid. Try again: ");
+                delMethod = input.nextInt();
+            }
+            if (delMethod == 1){
+                String albumSearch;  //String to hold song requested
+                int albumNum = 0;
+                int albumChoice = -4;
+                ArrayList <Album> albumsFound = new ArrayList<Album>();
+                ArrayList <Album> albumsToDelete = new ArrayList<Album>();
+                input.nextLine();   //Clear buffer
+                System.out.print("Enter name of album to delete: ");   //Prompt user for requested album
+                albumSearch = input.nextLine();      //Take result
+                albumsFound = main.searchAlbums(albumSearch, main.Artists);
+                while (albumsFound.isEmpty()){
+                    System.out.println("No albums found.");
+                    System.out.print("Album not found. Enter 0 to exit, any other number to try again: ");
+                    nextChoice = input.nextInt();
+                    if (choice == 0){
+                        System.out.println("Returning to menu...");
+                        return;
+                    }
+                    else{
+                        System.out.print("Enter name of album to delete: ");
+                        input.nextLine();
+                        albumSearch = input.nextLine();
+                        albumsFound = main.searchAlbums(albumSearch, main.Artists);
+                    }
+                }
+                
+                for(int i = 0; i < albumsFound.size(); i++){
+                    albumNum++;
+                    System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
+                }
+
+                System.out.println("Enter number of album to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
+                while (albumChoice != -2){
+                    System.out.print("Delete/Restore Album#:");
+                    albumChoice = input.nextInt();
+                    while(albumChoice < -3 || albumChoice > albumNum){
+                        System.out.print("Invalid. Try again: ");
+                        albumChoice = input.nextInt();
+                    }
+                    if (albumChoice == -2){
+                        break;
+                    }
+                    else if (albumChoice == -3){
+                        for (int j = 0; j < albumNum; j++){
+                            if (delChoices.contains(j))
+                                delChoices.remove(j);
+                            delChoices.add(j);
+                        }
+                        for(int i = 0; i < albumsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
+                            else
+                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
+                        }
+                    }
+                    else{
+                        if (delChoices.contains((Integer)albumChoice))
+                            delChoices.remove((Integer)albumChoice);
+                        else
+                            delChoices.add(albumChoice);
+                        for(int i = 0; i < albumsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
+                            else
+                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
+                        }
+                    }
+                }
+                delChoices.sort(new IntComparator());
+                for(int i= 0; i < delChoices.size(); i++)
+                    albumsToDelete.add(albumsFound.get(delChoices.get(i)));
+                for(int j = 0; j < albumsFound.size(); j++)
+                    main.deleteAlbum(albumsToDelete.get(j), main.Artists);
+                System.out.println("Operation complete...");
+                
+            }
+            else if (delMethod == 2){
+                String albumSearch;  //String to hold song requested
+                int albumNum = 0;
+                int albumChoice = -4;
+                String fromArtistDelete;
+                Artist artistFromDelete = null;
+                ArrayList <Album> albumsFound = new ArrayList<Album>();
+                ArrayList <Album> albumsToDelete = new ArrayList<Album>();
+                input.nextLine();   //Clear buffer                      
+                System.out.print("Enter name of Artist to delete albums from: ");
+                fromArtistDelete = input.nextLine();
+                artistFromDelete = main.searchArtist(fromArtistDelete, main.Artists);
+                while(artistFromDelete == null){
+                    int tryAgain;
+                    System.out.print("Artist not found. Press 0 to exit, any other number to try again: ");
+                    tryAgain = input.nextInt();
+                    if (tryAgain == 0)
+                        return;
+                    else{
+                        System.out.print("Enter name of Artist to delete albums from: ");
+                        fromArtistDelete=input.nextLine();
+                        artistFromDelete = main.searchArtist(fromArtistDelete, main.Artists);
+                    }
+                    
+                }
+                for (int i = 0; i < artistFromDelete.getAlbums().size(); i++){
+                        albumsFound.add(artistFromDelete.getAlbum(i));
+                }
+                
+                for(int i = 0; i < albumsFound.size(); i++){
+                    albumNum++;
+                    System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
+                }
+
+                System.out.println("Enter number of album to delete, enter again to keep, continue until all albums to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
+                while (albumChoice != -2){
+                    System.out.print("Delete/Restore Album#:");
+                    albumChoice = input.nextInt();
+                    while(albumChoice < -3 || albumChoice > albumNum){
+                        System.out.print("Invalid. Try again: ");
+                        albumChoice = input.nextInt();
+                    }
+                    if (albumChoice == -2){
+                        break;
+                    }
+                    else if (albumChoice == -3){
+                        for (int j = 0; j < albumNum; j++){
+                            if (delChoices.contains(j))
+                                delChoices.remove(j);
+                            delChoices.add(j);
+                        }
+                        for(int i = 0; i < albumsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
+                            else
+                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
+                        }
+                    }
+                    else{
+                        if (delChoices.contains((Integer)albumChoice))
+                            delChoices.remove((Integer)albumChoice);
+                        else
+                            delChoices.add(albumChoice);
+                        for(int i = 0; i < albumsFound.size(); i++){
+                            if(delChoices.contains(i))
+                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
+                            else
+                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
+                        }
+                    }
+                }
+                delChoices.sort(new IntComparator());
+                for(int i= 0; i < delChoices.size(); i++)
+                    albumsToDelete.add(albumsFound.get(delChoices.get(i)));
+                for(int j = 0; j < albumsToDelete.size(); j++)
+                    main.deleteAlbum(albumsToDelete.get(j), main.Artists);
+                System.out.println("Operation complete...");
+            }
+        }
+        else if (choice == 3){
+            String artistDelete;
+            Artist artistToDelete = null;
+            System.out.print("Enter name of Artist to delete: ");
+            input.nextLine();
+            artistDelete = input.nextLine();
+            artistToDelete = main.searchArtist(artistDelete, main.Artists);
+            while(artistToDelete == null){
+                int tryAgain;
+                System.out.print("Artist not found. Press 0 to exit, any other number to try again: ");
+                tryAgain = input.nextInt();
+                if (tryAgain == 0)
+                    return;
+                else{
+                    System.out.print("Enter name of Artist to delete: ");
+                    artistDelete=input.nextLine();
+                    artistToDelete = main.searchArtist(artistDelete, main.Artists);
+                }
+
+            }
+            main.deleteArtist(artistToDelete, main.Artists);
+            System.out.println("Operation complete...");
+        }
+    }
+        
+    public static void searchController(SongDB main, Scanner input){
+        choiceMenu();
+        int choice = input.nextInt();
+        while (choice < 0 || choice > 3){     //validate sub-choice between 1-3 inclusive
+                    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
+                    choice = input.nextInt();
+                }
+        if (choice == 0){
+            System.out.println("Returning to menu...");
+            return;
+        }
+        else if (choice == 1){
+            String songSearch;  //String to hold song requested
+            input.nextLine();   //Clear buffer
+            System.out.print("Enter name of song: ");   //Prompt user for requested song
+            songSearch = input.nextLine();      //Take result
+            ArrayList <Song> songsFound = main.searchSongs(songSearch, main.Artists);
+            if (songsFound.isEmpty())
+                System.out.println("No songs found...");
+            else{
+                for (int i = 0; i < songsFound.size(); i++)
+                    System.out.println(songsFound.get(i).toLabeledString());
+            }
+        }
+        else if (choice == 2){
+            String albumSearch;  //String to hold song requested
+            input.nextLine();   //Clear buffer
+            System.out.print("Enter name of album: ");   //Prompt user for requested song
+            albumSearch = input.nextLine();      //Take result
+            ArrayList <Album> albumsFound = main.searchAlbums(albumSearch, main.Artists);
+            if (albumsFound.isEmpty())
+                System.out.println("No albums found...");
+            else{
+                for(int i = 0; i < albumsFound.size(); i++)
+                    System.out.println(albumsFound.get(i).toString());
+            }
+        }
+        else if (choice == 3){
+            String artistSearch;  //String to hold song requested
+            input.nextLine();   //Clear buffer
+            System.out.print("Enter name of artist: ");   //Prompt user for requested song
+            artistSearch = input.nextLine();      //Take result
+            Artist result = main.searchArtist(artistSearch, main.Artists);        //Run searchSong passing songSearch and Songs ArrayList
+            if(result==null){
+                System.out.println("Artist not found...");
+            }else{
+                System.out.println(result.toString());
+                System.out.println(result.albumsView());
+            }
+        }        
     }
     
     //addSong is a static void taking input and Artists, asks user for fields of data including artist and album, and adds a new song
     //with these specified fields to correct album and artist
-    public static void addSong(Scanner input, ArrayList <Artist> Artists){
+    /*public static void addSong(Scanner input, ArrayList <Artist> Artists){
         Song addSong = null;        //Song addSong initialized to null, will hold the new song to be added to album of artist
         Artist addArtist = null;    //Artist addArtist initialized to null, will hold the artist the song will be added to
         Album addAlbum = null;      //Album addAlbum initialized to null, will hold the album the song will be added to
@@ -167,6 +698,8 @@ public class Main {
                 addArtist = new Artist(artist);     //set addArtist to new Artist passing artist String
             }
         }  
+        
+        addArtist = searchArtist(artist, Artists);
         
         //Print out formatted list of albums that currently exist for selected artist
         System.out.println("+----------+"
@@ -353,24 +886,7 @@ public class Main {
         }
     }
     
-    public static void editController(Scanner input, ArrayList <Artist> Artists){
-        choiceMenu();
-        int choice = input.nextInt();
-        while (choice < 0 || choice > 3){     //validate sub-choice between 1-3 inclusive
-                    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
-                    choice = input.nextInt();
-                }
-        if (choice == 0)
-            return;
-        else if (choice == 1)
-            editSong(input, Artists);
-        else if (choice == 2)
-            editAlbum(input, Artists);
-        else if (choice == 3)
-            editArtist(input, Artists);
-    }
-    
-    public static void editSong(Scanner input, ArrayList <Artist> Artists){
+      public static void editSong(Scanner input, ArrayList <Artist> Artists){
         
     }
     
@@ -541,470 +1057,7 @@ public class Main {
         System.out.println("Artist name changed!");
     }
     
-    public static void deleteController(Scanner input, ArrayList <Artist> Artists){
-        choiceMenu();
-        int choice;
-        int nextChoice; 
-        int delMethod ;
-        ArrayList <Integer> delChoices = new ArrayList<>();
-        
-        choice = input.nextInt();
-        while (choice < 0 || choice > 3){     //validate sub-choice between 1-3 inclusive
-                    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
-                    choice = input.nextInt();
-                }
-        if (choice == 0)
-            return;
-        else if (choice == 1){
-            System.out.print("Enter 1 to delete Song(s) by name, 2 to delete Song(s) by Album, 3 to delete Songs(s) by Artist: ");
-            delMethod= input.nextInt();
-            while(delMethod < 1 || delMethod >3){
-                System.out.print("Invalid. Try again: ");
-                delMethod = input.nextInt();
-            }
-            if (delMethod == 1){
-                int songNum = 0;
-                int songChoice = -4;
-                String songDelete;
-                ArrayList <Song> songsFound = new ArrayList<>();
-                ArrayList <Song> songsToDelete = new ArrayList<>();
-                System.out.print("Enter name of song(s) to delete: ");
-                input.nextLine();
-                songDelete = input.nextLine();
-                songsFound = searchSongs(songDelete, Artists);
-                while (songsFound.isEmpty()){
-                    System.out.print("Song(s) not found. Enter 0 to exit, any other number to try again: ");
-                    nextChoice = input.nextInt();
-                    if (choice == 0){
-                        System.out.println("Returning to menu...");
-                        return;
-                    }
-                    else{
-                        System.out.print("Enter name of Song(s) to delete: ");
-                        input.nextLine();
-                        songDelete = input.nextLine();
-                        songsFound = searchSongs(songDelete, Artists);
-                    }
-                }
-
-                for(int i = 0; i < songsFound.size(); i++){
-                    songNum++;
-                    System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                }
-
-                System.out.println("Enter number of song to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
-                while (songChoice != -2){
-                    System.out.print("Delete/Restore Song#:");
-                    songChoice = input.nextInt();
-                    while(songChoice < -3 || songChoice > songNum){
-                        System.out.print("Invalid. Try again: ");
-                        songChoice = input.nextInt();
-                    }
-                    if (songChoice == -2){
-                        break;
-                    }
-                    else if (songChoice == -3){
-                        for (int j = 0; j < songNum; j++){
-                            if (delChoices.contains(j))
-                                delChoices.remove(j);
-                            delChoices.add(j);
-                        }
-                        for(int i = 0; i < songsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
-                            else
-                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                        }
-                    }
-                    else{
-                        if (delChoices.contains(songChoice))
-                            delChoices.remove(songChoice);
-                        else
-                            delChoices.add(songChoice);
-                        for(int i = 0; i < songsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
-                            else
-                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                        }
-                    }
-                }
-                delChoices.sort(new IntComparator());
-                for(int i= 0; i < delChoices.size(); i++)
-                    songsToDelete.add(songsFound.get(delChoices.get(i)));
-                for(int j = 0; j < songsToDelete.size(); j++)
-                    deleteSong(songsToDelete.get(j), Artists);
-                System.out.println("Operation complete...");
-            }
-            else if(delMethod == 2){
-                int albumNum = 0;
-                int albumChoice;
-                int songNum = 0;
-                int songChoice = -4;
-                String fromAlbumDelete;
-                ArrayList <Song> songsFound = new ArrayList<>();
-                ArrayList <Song> songsToDelete = new ArrayList<>();
-                ArrayList <Album> albumsFound = new ArrayList<>();
-                Album albumFromDelete = null;
-                
-                System.out.print("Enter name of album to delete songs from: ");
-                input.nextLine();
-                fromAlbumDelete = input.nextLine();
-                albumsFound = searchAlbums(fromAlbumDelete, Artists);
-                while (albumsFound.isEmpty()){
-                    System.out.print("Album not found. Enter 0 to exit, any other number to try again: ");
-                    nextChoice = input.nextInt();
-                    if (choice == 0){
-                        System.out.println("Returning to menu...");
-                        return;
-                    }
-                    else{
-                        System.out.print("Enter name of album to delete songs from: ");
-                        input.nextLine();
-                        fromAlbumDelete = input.nextLine();
-                        albumsFound = searchAlbums(fromAlbumDelete, Artists);
-                    }
-                }
-                
-                for(int j = 0; j < albumsFound.size(); j++){
-                    albumNum++;
-                    System.out.println("(" + j + ") " + albumsFound.get(j).simpAlbum());
-                }
-                
-                System.out.print("Enter number of album to delete songs from, -1 to exit: ");
-                albumChoice = input.nextInt();
-                while(albumChoice < -1 || albumChoice > albumNum){
-                    System.out.print("Invalid. Try again: ");
-                    albumChoice = input.nextInt();
-                }
-                if (albumChoice == -1){
-                    System.out.println("Returning to menu...");
-                    return;
-                }
-                
-                albumFromDelete = albumsFound.get(albumChoice);
-                songsFound = albumFromDelete.getSongs();
-                
-
-                for(int i = 0; i < songsFound.size(); i++){
-                    songNum++;
-                    System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                }
-
-                System.out.println("Enter number of song to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
-                while (songChoice != -2){
-                    System.out.print("Delete/Restore Song#:");
-                    songChoice = input.nextInt();
-                    while(songChoice < -3 || songChoice > songNum){
-                        System.out.print("Invalid. Try again: ");
-                        songChoice = input.nextInt();
-                    }
-                    if (songChoice == -2){
-                        break;
-                    }
-                    else if (songChoice == -3){
-                        for (int j = 0; j < songNum; j++){
-                            if (delChoices.contains(j))
-                                delChoices.remove(j);
-                            delChoices.add(j);
-                        }
-                        for(int i = 0; i < songsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
-                            else
-                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                        }
-                    }
-                    else{
-                        if (delChoices.contains((Integer)songChoice))
-                            delChoices.remove((Integer)songChoice);
-                        else
-                            delChoices.add(songChoice);
-                        for(int i = 0; i < songsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
-                            else
-                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                        }
-                    }
-                }
-                delChoices.sort(new IntComparator());
-                for(int i= 0; i < delChoices.size(); i++)
-                    songsToDelete.add(songsFound.get(delChoices.get(i)));
-                for(int j = 0; j < songsToDelete.size(); j++)
-                    deleteSong(songsToDelete.get(j), Artists);
-                System.out.println("Operation complete...");
-            }
-            else if(delMethod == 3){
-                int songNum = 0;
-                int songChoice = -4;
-                String fromArtistDelete;
-                Artist artistFromDelete = null;
-                ArrayList <Song> songsFound = new ArrayList<>();
-                ArrayList <Song> songsToDelete = new ArrayList<>();
-                
-                                
-                System.out.print("Enter name of Artist to delete songs from: ");
-                input.nextLine();
-                fromArtistDelete = input.nextLine();
-                artistFromDelete = searchArtist(fromArtistDelete, Artists);
-                while(artistFromDelete == null){
-                    int tryAgain;
-                    System.out.print("Artist not found. Press 0 to exit, any other number to try again: ");
-                    tryAgain = input.nextInt();
-                    if (tryAgain == 0)
-                        return;
-                    else{
-                        System.out.print("Enter name of Artist to delete songs from: ");
-                        fromArtistDelete=input.nextLine();
-                        artistFromDelete = searchArtist(fromArtistDelete, Artists);
-                    }
-                    
-                }
-                for (int i = 0; i < artistFromDelete.getAlbums().size(); i++){
-                    for(int j = 0; j < artistFromDelete.getAlbum(i).getSongs().size(); j++)
-                        songsFound.add(artistFromDelete.getAlbum(i).getSong(j));
-                }
-                
-                for(int i = 0; i < songsFound.size(); i++){
-                    songNum++;
-                    System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                }
-
-                System.out.println("Enter number of song to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
-                while (songChoice != -2){
-                    System.out.print("Delete/Restore Song#:");
-                    songChoice = input.nextInt();
-                    while(songChoice < -3 || songChoice > songNum){
-                        System.out.print("Invalid. Try again: ");
-                        songChoice = input.nextInt();
-                    }
-                    if (songChoice == -2){
-                        break;
-                    }
-                    else if (songChoice == -3){
-                        for (int j = 0; j < songNum; j++){
-                            if (delChoices.contains(j))
-                                delChoices.remove(j);
-                            delChoices.add(j);
-                        }
-                        for(int i = 0; i < songsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
-                            else
-                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                        }
-                    }
-                    else{
-                        if (delChoices.contains((Integer)songChoice))
-                            delChoices.remove((Integer)songChoice);
-                        else
-                            delChoices.add(songChoice);
-                        for(int i = 0; i < songsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + songsFound.get(i).simpSong());
-                            else
-                                System.out.println("(" + i + ") " + songsFound.get(i).simpSong());
-                        }
-                    }
-                }
-                delChoices.sort(new IntComparator());
-                for(int i= 0; i < delChoices.size(); i++)
-                    songsToDelete.add(songsFound.get(delChoices.get(i)));
-                for(int j = 0; j < songsToDelete.size(); j++)
-                    deleteSong(songsToDelete.get(j), Artists);
-                System.out.println("Operation complete...");
-            }    
-        }
-        
-        else if (choice == 2){
-            System.out.print("Enter 1 to delete Album(s) by name, 2 to delete Album(s) by Artist: ");
-            delMethod = input.nextInt();
-            while(delMethod < 1 || delMethod > 2){
-                System.out.print("Invalid. Try again: ");
-                delMethod = input.nextInt();
-            }
-            if (delMethod == 1){
-                String albumSearch;  //String to hold song requested
-                int albumNum = 0;
-                int albumChoice = -4;
-                ArrayList <Album> albumsFound = new ArrayList<Album>();
-                ArrayList <Album> albumsToDelete = new ArrayList<Album>();
-                input.nextLine();   //Clear buffer
-                System.out.print("Enter name of album to delete: ");   //Prompt user for requested album
-                albumSearch = input.nextLine();      //Take result
-                albumsFound = searchAlbums(albumSearch, Artists);
-                while (albumsFound.isEmpty()){
-                    System.out.println("No albums found.");
-                    System.out.print("Album not found. Enter 0 to exit, any other number to try again: ");
-                    nextChoice = input.nextInt();
-                    if (choice == 0){
-                        System.out.println("Returning to menu...");
-                        return;
-                    }
-                    else{
-                        System.out.print("Enter name of album to delete: ");
-                        input.nextLine();
-                        albumSearch = input.nextLine();
-                        albumsFound = searchAlbums(albumSearch, Artists);
-                    }
-                }
-                
-                for(int i = 0; i < albumsFound.size(); i++){
-                    albumNum++;
-                    System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
-                }
-
-                System.out.println("Enter number of album to delete, enter again to keep, continue until all songs to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
-                while (albumChoice != -2){
-                    System.out.print("Delete/Restore Album#:");
-                    albumChoice = input.nextInt();
-                    while(albumChoice < -3 || albumChoice > albumNum){
-                        System.out.print("Invalid. Try again: ");
-                        albumChoice = input.nextInt();
-                    }
-                    if (albumChoice == -2){
-                        break;
-                    }
-                    else if (albumChoice == -3){
-                        for (int j = 0; j < albumNum; j++){
-                            if (delChoices.contains(j))
-                                delChoices.remove(j);
-                            delChoices.add(j);
-                        }
-                        for(int i = 0; i < albumsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
-                            else
-                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
-                        }
-                    }
-                    else{
-                        if (delChoices.contains((Integer)albumChoice))
-                            delChoices.remove((Integer)albumChoice);
-                        else
-                            delChoices.add(albumChoice);
-                        for(int i = 0; i < albumsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
-                            else
-                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
-                        }
-                    }
-                }
-                delChoices.sort(new IntComparator());
-                for(int i= 0; i < delChoices.size(); i++)
-                    albumsToDelete.add(albumsFound.get(delChoices.get(i)));
-                for(int j = 0; j < albumsFound.size(); j++)
-                    deleteAlbum(albumsToDelete.get(j), Artists);
-                System.out.println("Operation complete...");
-                
-            }
-            else if (delMethod == 2){
-                String albumSearch;  //String to hold song requested
-                int albumNum = 0;
-                int albumChoice = -4;
-                String fromArtistDelete;
-                Artist artistFromDelete = null;
-                ArrayList <Album> albumsFound = new ArrayList<Album>();
-                ArrayList <Album> albumsToDelete = new ArrayList<Album>();
-                input.nextLine();   //Clear buffer                      
-                System.out.print("Enter name of Artist to delete albums from: ");
-                fromArtistDelete = input.nextLine();
-                artistFromDelete = searchArtist(fromArtistDelete, Artists);
-                while(artistFromDelete == null){
-                    int tryAgain;
-                    System.out.print("Artist not found. Press 0 to exit, any other number to try again: ");
-                    tryAgain = input.nextInt();
-                    if (tryAgain == 0)
-                        return;
-                    else{
-                        System.out.print("Enter name of Artist to delete albums from: ");
-                        fromArtistDelete=input.nextLine();
-                        artistFromDelete = searchArtist(fromArtistDelete, Artists);
-                    }
-                    
-                }
-                for (int i = 0; i < artistFromDelete.getAlbums().size(); i++){
-                        albumsFound.add(artistFromDelete.getAlbum(i));
-                }
-                
-                for(int i = 0; i < albumsFound.size(); i++){
-                    albumNum++;
-                    System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
-                }
-
-                System.out.println("Enter number of album to delete, enter again to keep, continue until all albums to delete are chosen and then enter -2 to finish. \nEnter -3 to delete all, or enter -1 to exit");
-                while (albumChoice != -2){
-                    System.out.print("Delete/Restore Album#:");
-                    albumChoice = input.nextInt();
-                    while(albumChoice < -3 || albumChoice > albumNum){
-                        System.out.print("Invalid. Try again: ");
-                        albumChoice = input.nextInt();
-                    }
-                    if (albumChoice == -2){
-                        break;
-                    }
-                    else if (albumChoice == -3){
-                        for (int j = 0; j < albumNum; j++){
-                            if (delChoices.contains(j))
-                                delChoices.remove(j);
-                            delChoices.add(j);
-                        }
-                        for(int i = 0; i < albumsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
-                            else
-                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
-                        }
-                    }
-                    else{
-                        if (delChoices.contains((Integer)albumChoice))
-                            delChoices.remove((Integer)albumChoice);
-                        else
-                            delChoices.add(albumChoice);
-                        for(int i = 0; i < albumsFound.size(); i++){
-                            if(delChoices.contains(i))
-                                System.out.println("X(" + i + ") " + albumsFound.get(i).simpAlbum());
-                            else
-                                System.out.println("(" + i + ") " + albumsFound.get(i).simpAlbum());
-                        }
-                    }
-                }
-                delChoices.sort(new IntComparator());
-                for(int i= 0; i < delChoices.size(); i++)
-                    albumsToDelete.add(albumsFound.get(delChoices.get(i)));
-                for(int j = 0; j < albumsToDelete.size(); j++)
-                    deleteAlbum(albumsToDelete.get(j), Artists);
-                System.out.println("Operation complete...");
-            }
-        }
-        else if (choice == 3){
-            String artistDelete;
-            Artist artistToDelete = null;
-            System.out.print("Enter name of Artist to delete: ");
-            input.nextLine();
-            artistDelete = input.nextLine();
-            artistToDelete = searchArtist(artistDelete, Artists);
-            while(artistToDelete == null){
-                int tryAgain;
-                System.out.print("Artist not found. Press 0 to exit, any other number to try again: ");
-                tryAgain = input.nextInt();
-                if (tryAgain == 0)
-                    return;
-                else{
-                    System.out.print("Enter name of Artist to delete: ");
-                    artistDelete=input.nextLine();
-                    artistToDelete = searchArtist(artistDelete, Artists);
-                }
-
-            }
-            deleteArtist(artistToDelete, Artists);
-            System.out.println("Operation complete...");
-        }
-    }
-    
-    public static void deleteSong(Song songDelete, ArrayList <Artist> Artists){
+     public static void deleteSong(Song songDelete, ArrayList <Artist> Artists){
         String artistName = songDelete.getArtist();
         String albumName = songDelete.getAlbum();
         String songName = songDelete.getName();
@@ -1025,58 +1078,6 @@ public class Main {
     
     public static void deleteArtist(Artist artistDelete, ArrayList  <Artist> Artists){
         Artists.remove(artistDelete);
-    }
-        
-    public static void searchController(Scanner input, ArrayList <Artist> Artists){
-        choiceMenu();
-        int choice = input.nextInt();
-        while (choice < 0 || choice > 3){     //validate sub-choice between 1-3 inclusive
-                    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
-                    choice = input.nextInt();
-                }
-        if (choice == 0){
-            System.out.println("Returning to menu...");
-            return;
-        }
-        else if (choice == 1){
-            String songSearch;  //String to hold song requested
-            input.nextLine();   //Clear buffer
-            System.out.print("Enter name of song: ");   //Prompt user for requested song
-            songSearch = input.nextLine();      //Take result
-            ArrayList <Song> songsFound = searchSongs(songSearch, Artists);
-            if (songsFound.isEmpty())
-                System.out.println("No songs found...");
-            else{
-                for (int i = 0; i < songsFound.size(); i++)
-                    System.out.println(songsFound.get(i).toLabeledString());
-            }
-        }
-        else if (choice == 2){
-            String albumSearch;  //String to hold song requested
-            input.nextLine();   //Clear buffer
-            System.out.print("Enter name of album: ");   //Prompt user for requested song
-            albumSearch = input.nextLine();      //Take result
-            ArrayList <Album> albumsFound = searchAlbums(albumSearch, Artists);
-            if (albumsFound.isEmpty())
-                System.out.println("No albums found...");
-            else{
-                for(int i = 0; i < albumsFound.size(); i++)
-                    System.out.println(albumsFound.get(i).toString());
-            }
-        }
-        else if (choice == 3){
-            String artistSearch;  //String to hold song requested
-            input.nextLine();   //Clear buffer
-            System.out.print("Enter name of artist: ");   //Prompt user for requested song
-            artistSearch = input.nextLine();      //Take result
-            Artist result = searchArtist(artistSearch, Artists);        //Run searchSong passing songSearch and Songs ArrayList
-            if(result==null){
-                System.out.println("Artist not found...");
-            }else{
-                System.out.println(result.toString());
-                System.out.println(result.albumsView());
-            }
-        }        
     }
     
     public static ArrayList <Song> searchSongs(String songSearch, ArrayList<Artist> Artists){
@@ -1244,5 +1245,5 @@ public class Main {
             }
         }
         return result;
-    }
+    }*/
 }
