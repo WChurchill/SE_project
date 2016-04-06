@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class SongDB {
+public class SongDB{
     Scanner scanner = null;
     static final int curYear = Calendar.getInstance().get(Calendar.YEAR);       //Get current year from calendar, will be used to verify music creation
     static final int tooOld = curYear - 100;        //static final int tooOld is curYear minus 100 signifies lower boundary of song and album years
@@ -16,17 +16,15 @@ public class SongDB {
     ArrayList<Artist> Artists = new ArrayList <Artist>();
     
     public static void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
-        System.out.print(
-            "0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
+        System.out.print("0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
     }
     
     public ArrayList<Artist> getArtists(){
         return this.Artists;
     }
     
-    public SongDB(String fileName){
-	Artists = artists(fileName);
-        Artists.sort(new ArtistComparator());
+    public SongDB(){
+        
     }
 
     public ArrayList<Song> loadFromFile(String filename) throws FileNotFoundException{
@@ -88,47 +86,40 @@ public class SongDB {
         return albums;
     }
     
-    public ArrayList<Artist> artists (String fileName){
-        try{
-            ArrayList<Song> songList = loadFromFile(fileName);
-            ArrayList<Album> albumList = albums(songList);
-            ArrayList<Artist> artistList = new ArrayList<Artist>();
+    public void loadArtistsFromFile (String fileName) throws FileNotFoundException{
+	ArrayList<Song> songList = loadFromFile(fileName);
+	ArrayList<Album> albumList = albums(songList);
+	ArrayList<Artist> artistList = new ArrayList<Artist>();
            
-            Artist seek = null;
+	Artist seek = null;
 
-            for(int i = 0; i < albumList.size(); i++){
-                seek = new Artist(albumList.get(i).getArtist());
-                if(!artistList.contains(seek)){
-                    //System.out.println("New artist");
-                    artistList.add(seek);
-                    seek.addAlbum(albumList.get(i));
-                }
-                else if(artistList.contains(seek)){
-                    //System.out.println("Existing Artist");
-                    for (int j = 0; j < artistList.size(); j++){
-                        if(artistList.get(j).getName().equals(albumList.get(i).getArtist())){
-                            seek = artistList.get(j);
-                            break;
-                        }
-                    }
-                    seek.addAlbum(albumList.get(i));
-                }
-            }
+	for(int i = 0; i < albumList.size(); i++){
+	    seek = new Artist(albumList.get(i).getArtist());
+	    if(!artistList.contains(seek)){
+		//System.out.println("New artist");
+		artistList.add(seek);
+		seek.addAlbum(albumList.get(i));
+	    }
+	    else if(artistList.contains(seek)){
+		//System.out.println("Existing Artist");
+		for (int j = 0; j < artistList.size(); j++){
+		    if(artistList.get(j).getName().equals(albumList.get(i).getArtist())){
+			seek = artistList.get(j);
+			break;
+		    }
+		}
+		seek.addAlbum(albumList.get(i));
+	    }
+	}
         
-        for (int i = 0; i < artistList.size(); i++){
-            for (int j = 0; j < artistList.get(i).getAlbums().size(); j++)
-                artistList.get(i).getAlbum(j).getSongs().sort(new SongComparator());
-            artistList.get(i).getAlbums().sort(new AlbumTimeComparator());
-        }
-        
-        artistList.sort(new ArtistComparator());
-            
-        return artistList;
-        } catch(FileNotFoundException e){
-            System.out.println("Error: File does not exist. Exiting...");
-            System.exit(0);
-        }
-        return null;
+	for (int i = 0; i < artistList.size(); i++){
+	    for (int j = 0; j < artistList.get(i).getAlbums().size(); j++)
+		artistList.get(i).getAlbum(j).getSongs().sort(new SongComparator());
+	    artistList.get(i).getAlbums().sort(new AlbumTimeComparator());
+	}
+
+    	artistList.sort(new ArtistComparator());
+	Artists = artistList;
     }
     
     public void saveToFile(String filename, ArrayList<Song> songList) throws IOException

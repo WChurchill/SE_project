@@ -9,13 +9,22 @@ import java.util.Calendar;
 import java.io.FileNotFoundException;
 
 public class Main {
+    static final String songFile = "songs.txt";
+    
     static final int curYear = Calendar.getInstance().get(Calendar.YEAR);       //Get current year from calendar, will be used to verify music creation
     static final int tooOld = curYear - 100;        //static final int tooOld is curYear minus 100 signifies lower boundary of song and album years
     static final int tooNew = curYear + 10;         //static final int tooNew is curYear plus 10 signifies upper boundary of song and album years
 
     public static void main(String[] args) {
        //ArrayList <Artist> Artists = new ArrayList <Artist>();      //initialize new ArrayList <Artist> Artists which will hold all artists, albums, and songs
-        SongDB main = new SongDB("songs.txt");     //initialize new SongDB main which will be used to fill Artists with all items
+        SongDB main = new SongDB();     //initialize new SongDB main which will be used to fill Artists with all items
+	try{
+	    main.loadArtistsFromFile(songFile);
+	}catch(FileNotFoundException e){
+	    System.out.println("ERROR: "+songFile+" not found. ");
+	    System.out.println("Exiting...");
+	    System.exit(0);
+	}
         //Artists = main.artists("songs.txt");        //Artists equals the ArrayList<Artist> returned by main.artists passing file name "songs.txt" 
         //Artists.sort(new ArtistComparator());       //sort Artists using ArtistComparator
         Scanner input = new Scanner(System.in);     //input scanner

@@ -1,3 +1,5 @@
+package SE_project;
+
 import java.util.ArrayList;
 
 import java.io.FileNotFoundException;
