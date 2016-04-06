@@ -46,5 +46,8 @@ public class Customer {
             System.out.print(history.get(i));
         }
     }
-    
+
+    public String toString(){
+	return username+"\n"+password;
+    }
 }

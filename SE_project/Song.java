@@ -8,6 +8,7 @@ public class Song {
     private String album;
     private int seconds;
     private int year;
+    private double price;
 
     public Song(String song, String artist, String album, int seconds, int year){
 	this.songName = song;
@@ -15,6 +16,16 @@ public class Song {
 	this.album = album;
 	this.seconds = seconds;
 	this.year = year;
+	this.price = 0.99;
+    }
+
+    public Song(String song, String artist, String album, int seconds, int year, double price){
+	this.songName = song;
+	this.artist = artist;
+	this.album = album;
+	this.seconds = seconds;
+	this.year = year;
+	this.price = price;
     }
     
     // Default Constructor
@@ -24,6 +35,7 @@ public class Song {
 	album = "<unknown>";
 	seconds = -1;
 	year = -1;
+	price = 0;
     }
     
     // Accessors
@@ -47,6 +59,10 @@ public class Song {
 	return year;
     }
 
+    public double getPrice(){
+	return price;
+    }
+
     // Mutators
     public void setName(String name) {
 	songName = name;
@@ -66,6 +82,10 @@ public class Song {
 
     public void setYear(int year) {
 	this.year = year;
+    }
+    
+    public void setPrice(double newPrice){
+	price = newPrice;
     }
     
     public String simpSong(){

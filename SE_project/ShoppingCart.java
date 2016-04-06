@@ -5,10 +5,21 @@
  */
 package SE_project;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Catherine Jojo
  */
-class ShoppingCart {
+
+class ShoppingCart extends ArrayList<Song> {
     
+    
+    public double getTotal(){
+	double total = 0;
+	for(Song song : this){
+	    total += song.getPrice();
+	}
+	return total;
+    }
 }
