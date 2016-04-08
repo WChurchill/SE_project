@@ -3,22 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-import java.util.ArrayList;
-
+package SE_project.SE_project;
+import java.util.*;
 /**
  *
  * @author Catherine Jojo
  */
-
-class ShoppingCart extends ArrayList<Song> {
+public class HistoryDialogue {
+    public HistoryDialogue(){
+    }
     
-    
-    public double getTotal(){
-	double total = 0;
-	for(Song song : this){
-	    total += song.getPrice();
-	}
-	return total;
+    public void getCustomer(String un){
+        HistoryController history=new HistoryController();        
     }
 }

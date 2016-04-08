@@ -59,7 +59,18 @@ public class CustomerDB {
 	}
 	return results;
     }
-
+    
+    //return specific customer
+    public Customer getCustomer(String name){
+	//find customer in database based on username
+	for(Customer c : customers){
+	    if(c.getUsername().toLowerCase().equals(name.toLowerCase())){
+		return c; 
+	    }
+	}
+        //if customer not found 
+	return null;
+    }
     
 }
 
