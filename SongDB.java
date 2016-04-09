@@ -1,5 +1,4 @@
-
-
+//import SE_project.ArtistComparator;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;

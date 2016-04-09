@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package SE_project.SE_project;
 import java.util.*;
 /**
  *
@@ -21,7 +20,7 @@ public class HistoryController {
         
         //print results 
         if(c!=null){
-            c.printPurchases();
+            c.printPuchases();
         }
         else{
             System.out.println("Customer not found.");
