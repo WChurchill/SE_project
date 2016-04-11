@@ -1,19 +1,32 @@
 import java.util.*;
 import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
 
 public class Main {
     static final String songFile = "songs.txt";
-    static Admin admin = new Admin();
+    static final String customerFile = "customers.txt";
+    static final int LOGIN_OPTION = 1;
+    static final int CREATE_ACCOUNT_OPTION = 2;
+    static final int SHUTDOWN_OPTION = 3;
     
     public static void main(String[] args) {
-       //ArrayList <Artist> Artists = new ArrayList <Artist>();      //initialize new ArrayList <Artist> Artists which will hold all artists, albums, and songs
-        SongDB main = new SongDB();     //initialize new SongDB main which will be used to fill Artists with all items
+	//ArrayList <Artist> Artists = new ArrayList <Artist>();      //initialize new ArrayList <Artist> Artists which will hold all artists, albums, and songs
+        SongDB songDB = SongDB.getInstance();     //initialize new SongDB main which will be used to fill Artists with all items
+	CustomerDB customerDB = CustomerDB.getInstance();
 	try{
-	    main.loadArtistsFromFile(songFile);
+	    songDB.loadArtistsFromFile(songFile);
+	    
 	}catch(FileNotFoundException e){
 	    System.out.println("ERROR: "+songFile+" not found. ");
 	    System.out.println("Exiting...");
 	    System.exit(0);
+	}
+	try{
+	    customerDB.loadFromFile(customerFile);
+	}catch(FileNotFoundException e){
+	    System.out.println("ERROR: "+customerFile+" not found. ");
+	    System.out.println("Exiting...");
+	    System.exit(0);	    
 	}
         //Artists = main.artists("songs.txt");        //Artists equals the ArrayList<Artist> returned by main.artists passing file name "songs.txt" 
         //Artists.sort(new ArtistComparator());       //sort Artists using ArtistComparator
@@ -22,54 +35,43 @@ public class Main {
         int subChoice;      //int for sub-menu choice
         int loginStat;
         Logo();     //Display Logo
-        loginStat = logIn(admin, input);
-        
-        if (loginStat == 0){
-            System.out.println("System exiting...");
-            System.exit(0);
-        }
-        else if (loginStat == 1){
-            System.out.println("Entering with elevated admin privileges");
-        }
-        
-        do{         //Display main menu and take choice
-            mainMenu();         //Display main menu
-            System.out.print("                            >>>Enter Choice: ");      //Prompt user for choice
-            choice = input.nextInt();       //Take as choice
-            while (choice < 1 || choice > 6){   //while choice is not between 1-6 inclusive, tell user invalid and take new choice
-                System.out.print("                            >>>Invalid. Enter Choice 1-6: ");
-                choice = input.nextInt();
-            }
 
-            switch (choice) {       //switch case to process main menu choice
-            case 1:
-                //addController(main, input);      //call addController passing input scanner and Artists
-                AddController add = new AddController(main);
-                add.add();
-                break;
-            case 2:
-                //editController(main, input);     //call editController passing input scanner and Artists
-                EditController edit = new EditController(main);
-                edit.edit();
-                break;
-            case 3:
-                //deleteController(main, input);   //call deleteController passing input scanner and Artists 
-                DeleteController delete = new DeleteController(main);
-                delete.delete();
-                break;
-            case 4:
-                //searchController(main, input);   //call searchController passing input scanner and Artists
-                SearchController search = new SearchController(main);
-                search.search();
-                break;
-            case 5:
-                System.out.println("Not Implemented");
-                break;
-            case 6:
-                System.exit(0);     //exit program
-                break;
-            }                     
-        } while(choice != 0);       //while choice is not to exit    
+	boolean validChoice = false;
+	LoginController lController = LoginController.getInstance();
+	int loginChoice;
+	do{
+	    promptLogin();
+	    
+	    try {
+		loginChoice = input.nextInt();
+
+		
+		switch(loginChoice){
+		case LOGIN_OPTION:
+		    lController.processLogin();
+		    break;
+		case CREATE_ACCOUNT_OPTION:
+		    lController.createAccount();
+		    break;
+		case SHUTDOWN_OPTION:
+		    printGoodbye();
+		    System.exit(0);
+		    break;
+		default:
+		    throw new InputMismatchException();
+		}
+	    }
+	    catch (InputMismatchException e) {
+		System.out.println("Invalid Choice");
+	    }
+	    catch(NoSuchElementException e){
+		System.out.println("Please enter a number.");
+	    }
+	}while(!validChoice);
+	
+	//loginStat = logIn(admin, input);
+	
+        
     }
     
     public static void Logo(){      //Logo is an ASCII art version of the title- Massive Music Megastore
@@ -84,11 +86,16 @@ public class Main {
             "+-----------------------------------------------------------------------------------------------------------------+");
            }
     
-    public static void mainMenu(){      //mainMenu is a menu that displays 6 different choices of operation: Add, Edit, Delete, Search, Purchase, and Exit
+    public static void customerMenu(){      //mainMenu is a menu that displays 6 different choices of operation: Add, Edit, Delete, Search, Purchase, and Exit
         System.out.println(
             "+------------[1. Add]------[2. Edit]------[3. Delete]------[4. Search]------[5. Purchase]------[6. Exit]----------+");
     }
-    
+
+    public static void adminMenu(){      //mainMenu is a menu that displays 6 different choices of operation: Add, Edit, Delete, Search, Purchase, and Exit
+        System.out.println(
+            "+------------[1. Add]------[2. Edit]------[3. Delete]------[4. Search]------[5. Purchase]------[6. Exit]----------+");
+    }
+
     public static void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
         System.out.print(
             "0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
@@ -98,60 +105,66 @@ public class Main {
         System.out.print("1.By Name \n2.By Year\n>>>Enter Choice: ");
     }
     
-    public static void loginScreen(){
-        System.out.print("1. Admin \n2. User \n3. Bypass\n>>>Enter Choice: ");
+    // public static int logIn(Admin admin, Scanner input){
+    //     loginScreen();        //display 2 login options
+    //     int userChoice = input.nextInt();
+    //     while (userChoice != 1 && userChoice != 2 && userChoice != 3){
+    //         System.out.print("Invalid. Try again: ");
+    //         userChoice = input.nextInt();
+    //     }
+    //     input.nextLine();
+    //     if (userChoice == 1){
+    //         String adID, adPSWD;
+    //         System.out.print("Enter Admin ID: ");
+    //         adID = input.nextLine();
+    //         while (!admin.checkID(adID)){
+    //             int exitChoice;
+    //             System.out.print("AdminID incorrect. Press 0 to exit, any other number to try again: ");
+    //             exitChoice = input.nextInt();
+    //             input.nextLine();
+    //             if(exitChoice == 0){
+    //                 return 0;
+    //             }
+    //             else{
+    //                 System.out.print("Enter Admin ID: ");
+    //                 adID = input.nextLine();
+    //             }
+    //         }
+    //         System.out.print("Enter Password for Admin " + admin.getID() + ": ");
+    //         adPSWD = input.nextLine();
+    //         while (!admin.checkPswd(adPSWD)){
+    //             int exitChoice;
+    //             System.out.print("Admin Password incorrect. Press 0 to exit, any other number to try again: ");
+    //             exitChoice = input.nextInt();
+    //             input.nextLine();
+    //             if(exitChoice == 0){
+    //                 return 0;
+    //             }
+    //             else{
+    //                 System.out.print("Enter Password for Admin " + admin.getID() + ": ");
+    //                 adPSWD = input.nextLine();
+    //             }
+    //         }
+    //         return 1;
+    //     }
+    //     else if(userChoice == 2){
+    //         return 2;
+    //     }
+    //     else if (userChoice == 3){
+    //         return 1;
+    //     }
+    //     return 0;
+    // }
+
+    public static void printGoodbye(){
+	System.out.println("Thank you for using Massive Music Megastore.");
+
     }
     
-    public static int logIn(Admin admin, Scanner input){
-        loginScreen();        //display 2 login options
-        int userChoice = input.nextInt();
-        while (userChoice != 1 && userChoice != 2 && userChoice != 3){
-            System.out.print("Invalid. Try again: ");
-            userChoice = input.nextInt();
-        }
-        input.nextLine();
-        if (userChoice == 1){
-            String adID, adPSWD;
-            System.out.print("Enter Admin ID: ");
-            adID = input.nextLine();
-            while (!admin.checkID(adID)){
-                int exitChoice;
-                System.out.print("AdminID incorrect. Press 0 to exit, any other number to try again: ");
-                exitChoice = input.nextInt();
-                input.nextLine();
-                if(exitChoice == 0){
-                    return 0;
-                }
-                else{
-                    System.out.print("Enter Admin ID: ");
-                    adID = input.nextLine();
-                }
-            }
-            System.out.print("Enter Password for Admin " + admin.getID() + ": ");
-            adPSWD = input.nextLine();
-            while (!admin.checkPswd(adPSWD)){
-                int exitChoice;
-                System.out.print("Admin Password incorrect. Press 0 to exit, any other number to try again: ");
-                exitChoice = input.nextInt();
-                input.nextLine();
-                if(exitChoice == 0){
-                    return 0;
-                }
-                else{
-                    System.out.print("Enter Password for Admin " + admin.getID() + ": ");
-                    adPSWD = input.nextLine();
-                }
-            }
-            return 1;
-        }
-        else if(userChoice == 2){
-            return 2;
-        }
-        else if (userChoice == 3){
-            return 1;
-        }
-        return 0;
+    public static void promptLogin(){
+	System.out.print("1. Log In \n2. Create Account \n3. Shut Down\n>>>Enter Choice: ");
     }
+    
 }
     
     //addController is a static void taking Scanner input, ArrayList<Artist> Artists, will call to addSong, addAlbum, or addArtist 

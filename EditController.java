@@ -1,13 +1,13 @@
 import java.util.*;
 
 public class EditController {
-    public SongDB main = null;
     
-    public EditController(SongDB newDB){
-        main = newDB;
+    public EditController(){
+
     }
     
     public void edit(){
+	SongDB main = SongDB.getInstance();
         Scanner input = new Scanner(System.in);
         choiceMenu();
         int choice = input.nextInt();

@@ -1,13 +1,14 @@
 import java.util.*;
 
 public class SearchController {
-    public SongDB main = null;
+
     
-    public SearchController(SongDB newDB){
-        main = newDB;
+    public SearchController(){
+
     }
     
     public void search(){
+	SongDB main = SongDB.getInstance();
         choiceMenu();
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();

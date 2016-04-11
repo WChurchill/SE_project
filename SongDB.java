@@ -13,6 +13,8 @@ public class SongDB{
     static final int tooOld = curYear - 100;        //static final int tooOld is curYear minus 100 signifies lower boundary of song and album years
     static final int tooNew = curYear + 10;         //static final int tooNew is curYear plus 10 signifies upper boundary of song and album years
     ArrayList<Artist> Artists = new ArrayList <Artist>();
+
+    private static SongDB instance;
     
     public static void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
         System.out.print("0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
@@ -21,8 +23,13 @@ public class SongDB{
     public ArrayList<Artist> getArtists(){
         return this.Artists;
     }
+
+    public static SongDB getInstance(){
+	if(instance==null) instance = new SongDB();
+	return instance;
+    }
     
-    public SongDB(){
+    private SongDB(){
         
     }
 

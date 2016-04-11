@@ -7,7 +7,7 @@ class SongDBTester
 {
     public static void main(String args[])
     {
-	SongDB db = new SongDB();
+	SongDB db =  SongDB.getInstance();
 	ArrayList<Song> songList = new ArrayList<Song>(0);
 	try{
 	    songList = db.loadFromFile("songs.txt");

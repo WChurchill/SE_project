@@ -1,13 +1,14 @@
 import java.util.*;
 
 public class DeleteController {
-    public SongDB main = null;
+
     
-    public DeleteController(SongDB newDB){
-        main = newDB;
+    public DeleteController(){
+
     }
     
     public void delete(){
+	SongDB main = SongDB.getInstance();
         Scanner input = new Scanner(System.in);
         choiceMenu();
         int choice;

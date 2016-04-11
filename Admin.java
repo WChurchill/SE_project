@@ -1,26 +1,19 @@
-
-
-
-public class Admin {
+public class Admin extends User {
     private static final String username = "admin";
     private static final String password = "dj4dm1n";
+    private static Admin instance;
     
-    public String getID(){
-        return this.username;
+    public static Admin getInstance(){
+	if(instance==null) instance = new Admin();
+	return instance;
+    }
+    
+    private Admin(){
+	super(username, password);
     }
 
-    public boolean checkID(String id){
-        if (!id.equals(username)){
-            return false;
-        }
-        return true;
+    public void startDialog(){
+	AdminDialog dialog = AdminDialog.getInstance();
+	dialog.mainLoop();
     }
-    
-    public boolean checkPswd(String pswd){
-        if (!pswd.equals(password)){
-            return false;
-        }
-        return true;
-    }
-    
 }

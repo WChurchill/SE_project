@@ -12,11 +12,11 @@ public class HistoryController {
     public HistoryController(){}
     
     public void getCustomer(String un){
-        CustomerDB customerDB=new CustomerDB(); 
+        CustomerDB customerDB= CustomerDB.getInstance(); 
         Customer c; 
         
         //get customer from database
-        c=customerDB.getCustomer(un);
+        c=(Customer)customerDB.getUser(un);
         
         //print results 
         if(c!=null){

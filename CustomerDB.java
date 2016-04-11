@@ -7,10 +7,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CustomerDB {
-    private ArrayList<Customer> customers = null;
+    private ArrayList<User> users = null;
+    private static CustomerDB instance;
 
-    public CustomerDB() {
-	// TODO: Singleton design pattern so we don't get multiple copies of this database
+    public static CustomerDB getInstance(){
+	if(instance==null) instance = new CustomerDB();
+	return instance;
+    }
+    
+    private CustomerDB() {
+	
     }
     
     public void loadFromFile(String filename) throws FileNotFoundException{
@@ -18,7 +24,7 @@ public class CustomerDB {
 	Scanner	scanner = new Scanner(new File(filename));
 	
 	// Instantiate the song ArrayList
-	ArrayList<Customer> customerList = new ArrayList<>();
+	ArrayList<User> customerList = new ArrayList<>();
 
 	// Loop over every 5-line song entry in the file
 	while(scanner.hasNextLine()){
@@ -35,39 +41,46 @@ public class CustomerDB {
 	}
 
 	scanner.close(); // release the file
-	customers = customerList;
+	customerList.add((User)Admin.getInstance());
+	users = customerList;
     }
 
     public void saveToFile(String filename) throws IOException
     {
     	FileWriter save = new FileWriter(filename);
     	// Loop through the list and print each element to file
-    	for(int i =0; i<customers.size(); i++) {
-	    save.write(customers.get(i).toString());
+    	for(int i =0; i<users.size(); i++) {
+	    User user = users.get(i);
+	    if(!(user instanceof Admin))
+		save.write(user.toString());
     	}
     	save.close();//close the file
     }
 
     public ArrayList<Customer> searchUsername(String name){
 	ArrayList<Customer> results = new ArrayList<>();
-	for(Customer c : customers){
+	for(User c : users){
 	    if(c.getUsername().toLowerCase().contains(name.toLowerCase())){
-		results.add(c);
+		results.add((Customer)c);
 	    }
 	}
 	return results;
     }
     
     //return specific customer
-    public Customer getCustomer(String name){
+    public User getUser(String name){
 	//find customer in database based on username
-	for(Customer c : customers){
-	    if(c.getUsername().toLowerCase().equals(name.toLowerCase())){
-		return c; 
+	for(User user : users){
+	    if(user.getUsername().toLowerCase().equals(name.toLowerCase())){
+		return user; 
 	    }
 	}
         //if customer not found 
 	return null;
+    }
+
+    public void addUser(User user){
+	users.add(user);
     }
     
 }

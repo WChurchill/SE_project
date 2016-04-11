@@ -10,7 +10,7 @@ public class SearchCustomerController {
 
     public Customer searchCustomer(){
 	SearchCustomerDialog dialog = new SearchCustomerDialog();
-	CustomerDB customerDB = new CustomerDB();
+	CustomerDB customerDB = CustomerDB.getInstance();
 	results = null;
 	while(true){
 	    String username = dialog.usernamePrompt();

@@ -1,14 +1,14 @@
 import java.util.*;
 
 public class AddController {
-    public SongDB main = null;
-    
-    public AddController(SongDB newDB){
-        main = newDB;
+        
+    public AddController(){
+        
     }
     
     public void add(){
         Scanner input = new Scanner(System.in);
+	SongDB main = SongDB.getInstance();
         int choice;         //int to hold choice  
         choiceMenu();       //display choice menu
         choice = input.nextInt();       //take choice from user
