@@ -51,6 +51,7 @@ public class Main {
 		    lController.processLogin();
 		    break;
 		case CREATE_ACCOUNT_OPTION:
+		    LoginController lController = LoginController.getInstance();
 		    lController.createAccount();
 		    break;
 		case SHUTDOWN_OPTION:
@@ -86,16 +87,6 @@ public class Main {
             "+-----------------------------------------------------------------------------------------------------------------+");
            }
     
-    public static void customerMenu(){      //mainMenu is a menu that displays 6 different choices of operation: Add, Edit, Delete, Search, Purchase, and Exit
-        System.out.println(
-            "+------------[1. Add]------[2. Edit]------[3. Delete]------[4. Search]------[5. Purchase]------[6. Exit]----------+");
-    }
-
-    public static void adminMenu(){      //mainMenu is a menu that displays 6 different choices of operation: Add, Edit, Delete, Search, Purchase, and Exit
-        System.out.println(
-            "+------------[1. Add]------[2. Edit]------[3. Delete]------[4. Search]------[5. Purchase]------[6. Exit]----------+");
-    }
-
     public static void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
         System.out.print(
             "0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
