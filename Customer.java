@@ -9,7 +9,7 @@ import java.util.*;
  * @author Catherine Jojo
  */
 public class Customer extends User {
-    private LinkedList<ShoppingCart> history=new LinkedList();
+    private LinkedList<ShoppingCart> history=new LinkedList<ShoppingCart>();
     
     public Customer(String username, String password){
 	super(username, password);
