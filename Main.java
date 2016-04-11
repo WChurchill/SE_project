@@ -51,7 +51,6 @@ public class Main {
 		    lController.processLogin();
 		    break;
 		case CREATE_ACCOUNT_OPTION:
-		    LoginController lController = LoginController.getInstance();
 		    lController.createAccount();
 		    break;
 		case SHUTDOWN_OPTION:

@@ -24,8 +24,7 @@ public class LoginDialog {
 	do{
 	    System.out.print("Create Account? [y/n]: ");
 	    response = input.next().trim().toLowerCase();
-	}while(response.equals("y") || response.equals("n"));
-
+	}while(!response.equals("y") && !response.equals("n"));
 	return response.equals("y");
     }
 
