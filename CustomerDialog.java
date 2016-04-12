@@ -22,10 +22,10 @@ public class CustomerDialog {
 
     private void printMenu(){
 	System.out.println(ADD_CART+") Add Song");
-	System.out.println(REMOVE_CART+") Edit Song");
-	System.out.println(SEARCH_SONG+") Delete Song");
-	System.out.println(VIEW_CART+") Search Songs");
-	System.out.println(CHECKOUT+") Search Customers");
+	System.out.println(REMOVE_CART+") Remove from Cart");
+	System.out.println(SEARCH_SONG+") Search Songs");
+	System.out.println(VIEW_CART+") View Cart");
+	System.out.println(CHECKOUT+") Checkout");
 	System.out.println(LOGOUT+") Logout");
 	
 	System.out.print(">>>Enter Choice: ");      //Prompt user for choice
