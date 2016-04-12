@@ -38,6 +38,7 @@ public class LoginController {
 	    CustomerDB customerDB = CustomerDB.getInstance();
 	    Customer customer = new Customer(username, password);
 	    customerDB.addUser(customer);
+	    dialog.createSuccess();
 	}
 	
     }
