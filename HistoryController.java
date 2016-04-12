@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class HistoryController {
     public HistoryController(){
-        System.out.println("Customer Username:");
+        System.out.print("Customer Username:");
         Scanner input = new Scanner(System.in);
         String username=input.nextLine();
         getCustomer(username); 

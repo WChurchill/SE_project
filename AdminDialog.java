@@ -62,12 +62,10 @@ public class AdminDialog {
 		    search.search();
 		    break;
 		case SEARCH_CUSTOMER:
-                    HistoryController history=new HistoryController(); 
-                    
-		    System.out.println("Not Implemented");
+                    System.out.println("Not Implemented");
 		    break;
 		case VIEW_CUSTOMER:
-		    System.out.println("Not Implemented");
+                    HistoryController history=new HistoryController();
 		    break;
 		case LOGOUT:
 		    return;
