@@ -95,4 +95,14 @@ public class Main {
         System.out.print("1.By Name \n2.By Year\n>>>Enter Choice: ");
     }
     
+    public static void printGoodbye(){
+ 	System.out.println("Thank you for using Massive Music Megastore.");
+ 
+     }
+     
+     public static void promptLogin(){
+ 	System.out.print("1. Log In \n2. Create Account \n3. Shut Down\n>>>Enter Choice: ");
+     }
+     
+ }
    

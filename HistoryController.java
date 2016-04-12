@@ -9,7 +9,13 @@ import java.util.*;
  * @author Catherine Jojo
  */
 public class HistoryController {
-    public HistoryController(){}
+    public HistoryController(){
+        System.out.println("Customer Username:");
+        Scanner input = new Scanner(System.in);
+        String username=input.nextLine();
+        getCustomer(username); 
+    }
+    
     
     public void getCustomer(String un){
         CustomerDB customerDB= CustomerDB.getInstance(); 
