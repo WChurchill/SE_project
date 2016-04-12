@@ -16,6 +16,10 @@ public class LoginDialog {
     public void invalidUser(){
 	System.out.println("Invalid username or password");
     }
+    
+    public void createSuccess(){
+    	System.out.println("Account has been successfully created");
+    }
 
     // returns true if the user wishes to create an account with the given info
     public boolean confirmEntries(){
