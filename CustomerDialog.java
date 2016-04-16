@@ -21,7 +21,7 @@ public class CustomerDialog {
     }
 
     private void printMenu(){
-	System.out.println(ADD_CART+") Add Song");
+	System.out.println(ADD_CART+") Add Song to Cart");
 	System.out.println(REMOVE_CART+") Remove from Cart");
 	System.out.println(SEARCH_SONG+") Search Songs");
 	System.out.println(VIEW_CART+") View Cart");
