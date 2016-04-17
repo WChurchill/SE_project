@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class LoginController {
     private static LoginController instance;
 
@@ -36,7 +38,8 @@ public class LoginController {
 
 	if(dialog.confirmEntries()){
 	    CustomerDB customerDB = CustomerDB.getInstance();
-	    Customer customer = new Customer(username, password);
+	    Customer customer = new Customer(username, password,
+					     new ArrayList<ShoppingCart>());
 	    customerDB.addUser(customer);
 	    dialog.createSuccess();
 	}

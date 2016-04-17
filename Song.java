@@ -1,5 +1,3 @@
-
-
 import java.util.*;
 
 public class Song {
@@ -20,7 +18,7 @@ public class Song {
     }
 
     public Song(String song, String artist, String album, int seconds, int year, double price){
-	this.songName = song;
+       	this.songName = song;
 	this.artist = artist;
 	this.album = album;
 	this.seconds = seconds;
@@ -125,6 +123,7 @@ public class Song {
     		duration+=Integer.toString(seconds%60); 
     	songString+= duration+"\r\n";
     	songString+= year+"\r\n";
+	songString+= price+"\r\n";
     	return songString;
     }
     

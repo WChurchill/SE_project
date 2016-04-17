@@ -33,6 +33,12 @@ public class CustomerDialog {
     
     public void mainLoop(){
 	Scanner input = new Scanner(System.in);
+
+	AddCartDialog addCartDialog = AddCartDialog.getInstance();
+	// RemoveCartDialog removeCartDialog = RemoveCartDialog.getInstance();
+	// SearchDialog searchDialog = SearchDialog.getInstance();
+	// ViewCartDialog viewCartDialog = ViewCartDialog.getInstance();
+	// AddCartDialog addCartDialog = AddCartDialog.getInstance();
 	while(true){         //Display main menu and take choice
 	    printMenu();         //Display main menu
 	    try{
@@ -40,10 +46,11 @@ public class CustomerDialog {
             
 		switch (choice) {       //switch case to process main menu choice
 		case ADD_CART:
-		    System.out.println("Not Implemented");
+		    
 		    break;
 		case REMOVE_CART:
-		    System.out.println("Not Implemented");
+		    
+		    
 		    break;
 		case VIEW_CART:
 		    System.out.println("Not Implemented");

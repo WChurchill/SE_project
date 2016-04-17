@@ -25,7 +25,7 @@ public class SearchController {
             input.nextLine();   //Clear buffer
             System.out.print("Enter name of song: ");   //Prompt user for requested song
             songSearch = input.nextLine();      //Take result
-            ArrayList <Song> songsFound = main.searchSongs(songSearch, main.Artists);
+            ArrayList <Song> songsFound = main.searchSongs(songSearch);
             if (songsFound.isEmpty())
                 System.out.println("No songs found...");
             else{

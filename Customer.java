@@ -9,10 +9,12 @@ import java.util.*;
  * @author Catherine Jojo
  */
 public class Customer extends User {
-    private LinkedList<ShoppingCart> history=new LinkedList<ShoppingCart>();
+    private ArrayList<ShoppingCart> history=new ArrayList<ShoppingCart>();
+    public ShoppingCart cart = new ShoppingCart();
     
-    public Customer(String username, String password){
+    public Customer(String username, String password, ArrayList<ShoppingCart> history){
 	super(username, password);
+	this.history = history;
     }
     
     public void printPuchases(){
@@ -21,12 +23,23 @@ public class Customer extends User {
         }
     }
 
-    public void addPurchase(ShoppingCart purchase){
-        history.add(purchase);
+    public void addPurchase(){
+	cart = new ShoppingCart();
+        history.add(cart);
     }
 
     public void startDialog(){
 	CustomerDialog dialog = CustomerDialog.getInstance();
 	dialog.mainLoop();
+    }
+
+    public String toString(){
+	String str = username+"\n";
+	str += password+"\n";
+	str += history.size()+"\n";
+	for(int i = 0; i<history.size(); i++){
+	    str+=history.get(i).toString();
+	}
+	return str;
     }
 }

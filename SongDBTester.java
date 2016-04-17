@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 class SongDBTester
 {
@@ -10,13 +11,15 @@ class SongDBTester
 	SongDB db =  SongDB.getInstance();
 	ArrayList<Song> songList = new ArrayList<Song>(0);
 	try{
-	    songList = db.loadFromFile("songs.txt");
+	    db.loadArtistsFromFile();
 	}catch(FileNotFoundException e){
 	    System.out.println("ERROR: File not found");
 	    e.printStackTrace();
 	}
-	for (int i = 0; i<songList.size(); i++) {
-	    System.out.println(songList.get(i).toLabeledString());
+	try{
+	    db.saveToFile();
+	}catch(IOException e){
+	    e.printStackTrace();
 	}
     }
 }

@@ -39,7 +39,7 @@ public class DeleteController {
                 System.out.print("Enter name of song(s) to delete: ");
                 input.nextLine();
                 songDelete = input.nextLine();
-                songsFound = main.searchSongs(songDelete, main.Artists);
+                songsFound = main.searchSongs(songDelete);
                 while (songsFound.isEmpty()){
                     System.out.print("Song(s) not found. Enter 0 to exit, any other number to try again: ");
                     nextChoice = input.nextInt();
@@ -51,7 +51,7 @@ public class DeleteController {
                         System.out.print("Enter name of Song(s) to delete: ");
                         input.nextLine();
                         songDelete = input.nextLine();
-                        songsFound = main.searchSongs(songDelete, main.Artists);
+                        songsFound = main.searchSongs(songDelete);
                     }
                 }
 

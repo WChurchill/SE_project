@@ -9,6 +9,7 @@ import java.util.Calendar;
 
 public class SongDB{
     Scanner scanner = null;
+    static final String songFile = "songs.txt";
     static final int curYear = Calendar.getInstance().get(Calendar.YEAR);       //Get current year from calendar, will be used to verify music creation
     static final int tooOld = curYear - 100;        //static final int tooOld is curYear minus 100 signifies lower boundary of song and album years
     static final int tooNew = curYear + 10;         //static final int tooNew is curYear plus 10 signifies upper boundary of song and album years
@@ -16,7 +17,7 @@ public class SongDB{
 
     private static SongDB instance;
     
-    public static void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
+    public void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
         System.out.print("0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
     }
     
@@ -33,9 +34,9 @@ public class SongDB{
         
     }
 
-    public ArrayList<Song> loadFromFile(String filename) throws FileNotFoundException{
+    public ArrayList<Song> loadFromFile() throws FileNotFoundException{
 	// Open the file
-	scanner = new Scanner(new File(filename));
+	scanner = new Scanner(new File(songFile));
 	
 	// Instantiate the song ArrayList
 	ArrayList<Song> songList = new ArrayList<>();
@@ -56,11 +57,13 @@ public class SongDB{
 	    seconds+=minutes*60; // convert minutes into seconds and add to seconds
 	    
 	    int year = scanner.nextInt();// Parse year YYYY
+	    double price = scanner.nextDouble();
 	    scanner.nextLine();// go to the next line
-	    songList.add(new Song(songName, artist, album, seconds, year));
+	    songList.add(new Song(songName, artist, album, seconds, year, price));
 	}
 	
 	scanner.close(); // release the file
+	
 	return songList;
     }
         
@@ -92,8 +95,8 @@ public class SongDB{
         return albums;
     }
     
-    public void loadArtistsFromFile (String fileName) throws FileNotFoundException{
-	ArrayList<Song> songList = loadFromFile(fileName);
+    public void loadArtistsFromFile () throws FileNotFoundException{
+	ArrayList<Song> songList = loadFromFile();
 	ArrayList<Album> albumList = albums(songList);
 	ArrayList<Artist> artistList = new ArrayList<Artist>();
            
@@ -128,20 +131,26 @@ public class SongDB{
 	Artists = artistList;
     }
     
-    public void saveToFile(String filename, ArrayList<Song> songList) throws IOException
+    public void saveToFile() throws IOException
     {
-    	FileWriter save = new FileWriter(filename);
+    	FileWriter save = new FileWriter(songFile);
     	// Loop through the list and print each element to file
-    	for(int i =0; i<songList.size(); i++)
-    	{
-    		save.write(songList.get(i).toString());
+    	for(int i =0; i<Artists.size(); i++) {
+	    Artist artist = Artists.get(i);
+	    for(int j = 0; j< artist.Albums.size(); j++){
+		Album album = artist.Albums.get(j);
+		for(int k = 0; k<album.Songs.size(); k++){
+		    Song song = album.Songs.get(k);
+		    save.write(song.toString());
+		}
+	    }
     	}
     	save.close();//close the file
     }
     
     //addSong is a static void taking input and Artists, asks user for fields of data including artist and album, and adds a new song
     //with these specified fields to correct album and artist
-    public static void addSong(Scanner input, ArrayList <Artist> Artists){
+    public  void addSong(Scanner input, ArrayList <Artist> Artists){
         Song addSong = null;        //Song addSong initialized to null, will hold the new song to be added to album of artist
         Artist addArtist = null;    //Artist addArtist initialized to null, will hold the artist the song will be added to
         Album addAlbum = null;      //Album addAlbum initialized to null, will hold the album the song will be added to
@@ -290,7 +299,7 @@ public class SongDB{
         
     //addAlbum is a static void taking input and Artists, asks user for fields of data including artist and album name, and adds a new song
     //with these specified fields to correct artist
-    public static void addAlbum(Scanner input, ArrayList <Artist> Artists){
+    public  void addAlbum(Scanner input, ArrayList <Artist> Artists){
         String albumName;       //String albumName holds name of new album
         String artistName;      //String artistName holds name of artist for new album
         int albumYear;          //int albumYear holds year of new album
@@ -366,7 +375,7 @@ public class SongDB{
     
     //addArtist is a static void taking input and Artists, will create new Artist from new artist name String, and add it to Artists
     //only if it doesn't already exist in the list
-    public static void addArtist(String newArtist, ArrayList <Artist> Artists){
+    public void addArtist(String newArtist, ArrayList <Artist> Artists){
         Artist addArtist = null;        //initialize Artist addArtist to null, will hold new artist to be added to Artists
         addArtist = new Artist(newArtist);      //addArtist is new Artist passing name of new artist
               
@@ -379,11 +388,11 @@ public class SongDB{
         }
     }
     
-    public static void editSong(Scanner input, ArrayList <Artist> Artists){
+    public  void editSong(Scanner input, ArrayList <Artist> Artists){
         
     }
     
-    public static void editAlbum(Scanner input, ArrayList <Artist> Artists){
+    public void editAlbum(Scanner input, ArrayList <Artist> Artists){
         String oldAlbumName;
         Album oldAlbumCopy = null;
         Album oldAlbumReal = null;
@@ -510,7 +519,7 @@ public class SongDB{
         }        
     }
     
-    public static void editArtist(Scanner input, ArrayList <Artist> Artists){
+    public void editArtist(Scanner input, ArrayList <Artist> Artists){
         String oldArtist;
         String newArtist;
         Artist oldArtistObj = null;
@@ -550,7 +559,7 @@ public class SongDB{
         System.out.println("Artist name changed!");
     }
     
-    public static void deleteSong(Song songDelete, ArrayList <Artist> Artists){
+    public void deleteSong(Song songDelete, ArrayList <Artist> Artists){
         String artistName = songDelete.getArtist();
         String albumName = songDelete.getAlbum();
         String songName = songDelete.getName();
@@ -561,7 +570,7 @@ public class SongDB{
         songAlbum.deleteSong(songName);
     }
     
-    public static void deleteAlbum(Album albumDelete, ArrayList <Artist> Artists){
+    public void deleteAlbum(Album albumDelete, ArrayList <Artist> Artists){
         String artistName = albumDelete.getArtist();
         String albumName = albumDelete.getName();
         Artist albumArtist = null;
@@ -569,13 +578,12 @@ public class SongDB{
         albumArtist.deleteAlbum(albumName);
     }
     
-    public static void deleteArtist(Artist artistDelete, ArrayList  <Artist> Artists){
+    public void deleteArtist(Artist artistDelete, ArrayList  <Artist> Artists){
         Artists.remove(artistDelete);
     }
-    
-    public static ArrayList <Song> searchSongs(String songSearch, ArrayList<Artist> Artists){
-        songSearch = songSearch.replaceAll("\\s+", "");
-        Artists.sort(new ArtistComparator());
+
+    public ArrayList <Song> searchSongs(String songSearch){
+	Artists.sort(new ArtistComparator());
         ArrayList<Album> Albums = new ArrayList<Album>();
         ArrayList<Song> Songs = new ArrayList<Song>();
         ArrayList<Song> foundSongs = new ArrayList<Song>();
@@ -682,10 +690,8 @@ public class SongDB{
             
             if(songSearch.compareTo(albumFound) < 0){
                     r = mid-1;
-
             }else if(songSearch.compareTo(albumFound) > 0){
                     l = mid+1;
-
             }else { 
                     result = mid;
                     l = mid+1;

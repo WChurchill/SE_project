@@ -21,4 +21,12 @@ class ShoppingCart extends ArrayList<Song> {
 	}
 	return total;
     }
+
+    public String toString(){
+	String str = this.size()+"\n";
+	for(int i = 0; i<this.size(); i++){
+	    str += this.get(i);
+	}
+	return str;
+    }
 }

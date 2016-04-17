@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Artist {
     private String name;
-    private ArrayList <Album> Albums = new ArrayList<Album>();
+    public ArrayList <Album> Albums = new ArrayList<Album>();
     
     public Artist(String name){
         this.name = name;

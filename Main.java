@@ -3,8 +3,6 @@ import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 
 public class Main {
-    static final String songFile = "songs.txt";
-    static final String customerFile = "customers.txt";
     static final int LOGIN_OPTION = 1;
     static final int CREATE_ACCOUNT_OPTION = 2;
     static final int SHUTDOWN_OPTION = 3;
@@ -14,17 +12,17 @@ public class Main {
         SongDB songDB = SongDB.getInstance();     //initialize new SongDB main which will be used to fill Artists with all items
 	CustomerDB customerDB = CustomerDB.getInstance();
 	try{
-	    songDB.loadArtistsFromFile(songFile);
+	    songDB.loadArtistsFromFile();
 	    
 	}catch(FileNotFoundException e){
-	    System.out.println("ERROR: "+songFile+" not found. ");
+	    System.out.println("ERROR: songs.txt not found. ");
 	    System.out.println("Exiting...");
 	    System.exit(0);
 	}
 	try{
-	    customerDB.loadFromFile(customerFile);
+	    customerDB.loadFromFile();
 	}catch(FileNotFoundException e){
-	    System.out.println("ERROR: "+customerFile+" not found. ");
+	    System.out.println("ERROR: customers.txt not found. ");
 	    System.out.println("Exiting...");
 	    System.exit(0);	    
 	}
@@ -54,6 +52,12 @@ public class Main {
 		    lController.createAccount();
 		    break;
 		case SHUTDOWN_OPTION:
+		    try{
+			customerDB.saveToFile();
+			songDB.saveToFile();
+		    }catch(Exception e){
+			e.printStackTrace();
+		    }
 		    printGoodbye();
 		    System.exit(0);
 		    break;
