@@ -150,7 +150,7 @@ public class SongDB{
     
     //addSong is a static void taking input and Artists, asks user for fields of data including artist and album, and adds a new song
     //with these specified fields to correct album and artist
-    public  void addSong(Scanner input, ArrayList <Artist> Artists){
+    public void addSong(Scanner input, ArrayList <Artist> Artists){
         Song addSong = null;        //Song addSong initialized to null, will hold the new song to be added to album of artist
         Artist addArtist = null;    //Artist addArtist initialized to null, will hold the artist the song will be added to
         Album addAlbum = null;      //Album addAlbum initialized to null, will hold the album the song will be added to
@@ -163,17 +163,17 @@ public class SongDB{
         String time;        //String time will hold new song time in string format to be converted later
         
         //Print out formatted list of artists that currently exist
-        System.out.println("+-----------+"
-                       + "\n|Artist List|" 
-                       + "\n+-----------+");
+        //System.out.println("+-----------+"
+                       // + "\n|Artist List|" 
+                       // + "\n+-----------+");
         
-        for(Artist art: Artists)
-            System.out.println(art.simpArtist());
+        // for(Artist art: Artists)
+        //     System.out.println(art.simpArtist());
         
-        System.out.println();       //newLine
+        //System.out.println();       //newLine
         
         //Get name of artist for song from user
-        input.nextLine();
+        ///input.nextLine();
         System.out.print("Enter Artist name: ");        
         artist = input.nextLine();
         addArtist = new Artist(artist);        //addArtist is equal to new Artist passing String artist
@@ -214,7 +214,8 @@ public class SongDB{
         System.out.println();       //newLine
         
         //Get album name and year from user
-        System.out.print("Enter Album name: ");     
+	input.nextLine(); 
+        System.out.print("Enter Album name: "); 
         album = input.nextLine();
         System.out.print("Enter Album Year: ");
         albumYear = input.nextInt();
