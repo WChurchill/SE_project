@@ -2,8 +2,14 @@ import java.util.*;
 
 public class SearchController {
 
+    private static SearchController instance;
+
+    public static SearchController getInstance(){
+	if(instance==null) instance =  new SearchController();
+	return instance;
+    }
     
-    public SearchController(){
+    private  SearchController(){
 
     }
     

@@ -58,7 +58,7 @@ public class AdminDialog {
 		    break;
 		case SEARCH_SONG:
 		    //searchController(main, input);   //call searchController passing input scanner and Artists
-		    SearchController search = new SearchController();
+		    SearchController search = SearchController.getInstance();
 		    search.search();
 		    break;
 		case SEARCH_CUSTOMER:

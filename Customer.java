@@ -9,6 +9,7 @@ import java.util.*;
  * @author Catherine Jojo
  */
 public class Customer extends User {
+    
     private ArrayList<ShoppingCart> history=new ArrayList<ShoppingCart>();
     public ShoppingCart cart = new ShoppingCart();
     
@@ -17,20 +18,21 @@ public class Customer extends User {
 	this.history = history;
     }
     
-    public void printPuchases(){
+    public void printPurchases(){
         for(int i=0;i<history.size();i++){
             System.out.print(history.get(i));
         }
     }
 
     public void addPurchase(){
-	cart = new ShoppingCart();
+	cart.setPurchaseTime();
         history.add(cart);
+	cart = new ShoppingCart();
     }
 
     public void startDialog(){
 	CustomerDialog dialog = CustomerDialog.getInstance();
-	dialog.mainLoop();
+	dialog.mainLoop(this);
     }
 
     public String toString(){

@@ -26,7 +26,7 @@ public class HistoryController {
         
         //print results 
         if(c!=null){
-            c.printPuchases();
+            c.printPurchases();
         }
         else{
             System.out.println("Customer not found.");

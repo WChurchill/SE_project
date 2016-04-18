@@ -42,7 +42,6 @@ public class Main {
 	    
 	    try {
 		loginChoice = input.nextInt();
-
 		
 		switch(loginChoice){
 		case LOGIN_OPTION:
@@ -70,6 +69,9 @@ public class Main {
 	    }
 	    catch(NoSuchElementException e){
 		System.out.println("Please enter a number.");
+	    }
+	    finally{
+		input.nextLine();
 	    }
 	}while(!validChoice);
 	
