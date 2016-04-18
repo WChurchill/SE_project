@@ -42,6 +42,8 @@ public class CustomerDB {
 	    for(int i = 0; i<numCarts; i++){
 		// parse each shopping cart
 		int numSongs = scanner.nextInt();
+		System.out.println("num songs: "+numSongs);
+
 		ShoppingCart cart = new ShoppingCart();
 		for(int j = 0; j< numSongs; j++){
 		    String songName = scanner.nextLine(); // Parse the name

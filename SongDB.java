@@ -580,37 +580,27 @@ public class SongDB{
     }
     
     public void deleteArtist(Artist artistDelete, ArrayList  <Artist> Artists){
-        Artists.remove(artistDelete);
+	Artists.remove(artistDelete);
     }
 
     public ArrayList <Song> searchSongs(String songSearch){
 	Artists.sort(new ArtistComparator());
-        ArrayList<Album> Albums = new ArrayList<Album>();
-        ArrayList<Song> Songs = new ArrayList<Song>();
-        ArrayList<Song> foundSongs = new ArrayList<Song>();
+	System.out.println("Searching for "+songSearch );
+
+	ArrayList<Song> foundSongs = new ArrayList<Song>();
         
         for (int i = 0; i < Artists.size(); i++){
-            for(int j = 0; j < Artists.get(i).getAlbums().size(); j++)
-                Albums.add(Artists.get(i).getAlbum(j));
-        }
-        Albums.sort(new AlbumComparator());
-        for (int k = 0; k < Albums.size(); k++){
-            for (int l = 0; l < Albums.get(k).getSongs().size(); l++)
-                Songs.add(Albums.get(k).getSong(l));
-        }
-        Songs.sort(new SongComparator());
-        int first = firstSong(Songs, songSearch);
-        int last = lastSong(Songs, songSearch);
-        
-        if(first == -1){
-            return foundSongs;			
-        }
-        else{
-            for(int i = first; i <= last; i++){
-                foundSongs.add(Songs.get(i));
-            }
-        }
-        return foundSongs;
+	    Artist artist = Artists.get(i);
+            for(int j = 0; j < artist.getAlbums().size(); j++){
+		Album album = artist.getAlbums().get(j);
+		for(int k = 0; k< album.getSongs().size(); k++){
+		    Song song = album.getSongs().get(k);
+		    if(song.getName().toLowerCase().contains(songSearch.toLowerCase()))
+			foundSongs.add(song);
+		}
+	    }
+	}
+	return foundSongs;
     }
     
     public static ArrayList<Album> searchAlbums(String albumSearch, ArrayList<Artist> Artists){

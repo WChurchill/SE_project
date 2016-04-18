@@ -3,6 +3,11 @@ import java.util.*;
 public class AddCartDialog {
 
     private static AddCartDialog instance = null;
+    private final int QUIT = 0;
+    private final int SEARCH_NAMES = 1;
+    private final int SEARCH_ALBUMS = 2;
+    private final int SEARCH_ARTISTS = 3;
+    
     
     private AddCartDialog(){
         
@@ -17,39 +22,48 @@ public class AddCartDialog {
         Scanner input = new Scanner(System.in);
 	SongDB songDB = SongDB.getInstance();
 	ShoppingCart cart = customer.cart;
-	//AddCartController addController = new AddCartController(this);
-        int choice;         //int to hold choice  
-        choiceMenu();       //display choice menu
-        choice = input.nextInt();       //take choice from user
-        input.nextLine();
-        while (choice < 0 || choice > 3){     //validate sub-choice between 0-3 inclusive
-	    System.out.print("\n>>>Invalid. Enter Choice 1-3, or 0 to exit: ");
-	    choice = input.nextInt();
-	}
-	ArrayList<Song> results;
-        if (choice == 0)
-            return;
-        else{
-	    String response = input.nextLine();
-	    if (choice == 1){  
-		//call to addSong passing input scanner and Artists
-		results = songDB.searchSongs(response);
-		for(Song s : results){
-		    cart.add(s);        
-		}
-	    }else if (choice == 2){
-		System.out.println("Not Implemented");
+	while(true){         //Display main menu and take choice
+	    printMenu();         //Display main menu
+	    try{
+		int choice = input.nextInt();       //Take as choice
+		input.nextLine();
 		
-		//results = songDB.searchSongs();
-	    } else if (choice == 3){
-		System.out.println("Not Implemented");
-	    }    
+		String query;
+		switch (choice) {       //switch case to process main menu choice
+		case SEARCH_NAMES:
+		    System.out.print("Enter a name: ");
+		    query = input.nextLine().trim().toLowerCase();
+		    ArrayList<Song> results = songDB.searchSongs(query);
+		    cart.add(results);
+		    System.out.println("Added "+results.size()+" songs to cart");
+		    return;
+		case SEARCH_ALBUMS:
+		    System.out.println("Not Implemented");
+		    return;
+		case SEARCH_ARTISTS:
+		    System.out.println("Not Implemented");
+		    return;
+		case QUIT:
+		    return;
+		default:
+		    throw new InputMismatchException();
+		}
+	    }catch (InputMismatchException e) {
+		System.out.println("Invalid Choice");
+		input.nextLine();
+	    }
+	    catch(NoSuchElementException e){
+		System.out.println("Please enter a number.");
+	    }
 	}
-	
     }
     
-    public static void choiceMenu(){    //choiceMenu is a menu that displays 3 specific choices of music classification: Song, Album, and Artist
-        System.out.print(
-			 "0.Exit\n1.Song \n2.Album \n3.Artist\n>>>Enter Choice: ");
+    private void printMenu(){
+	System.out.println(QUIT+") Cancel");
+	System.out.println(SEARCH_NAMES+") Name");
+	System.out.println(SEARCH_ALBUMS+") Album");
+	System.out.println(SEARCH_ARTISTS+") Artist");
+	
+	System.out.print(">>>Enter Choice: ");      //Prompt user for choice
     }
 }

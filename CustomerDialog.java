@@ -26,6 +26,7 @@ public class CustomerDialog {
 	System.out.println(REMOVE_CART+") Remove from Cart");
 	System.out.println(SEARCH_SONG+") Search Songs");
 	System.out.println(VIEW_CART+") View Cart");
+	System.out.println(VIEW_HISTORY+") View Purchase History");
 	System.out.println(CHECKOUT+") Checkout");
 	System.out.println(LOGOUT+") Logout");
 	
@@ -65,6 +66,7 @@ public class CustomerDialog {
 		    break;
 		case VIEW_HISTORY:
 		    customer.printPurchases();
+		    break;
 		case LOGOUT:
 		    return;
 		default:
@@ -75,6 +77,9 @@ public class CustomerDialog {
 	    }
 	    catch(NoSuchElementException e){
 		System.out.println("Please enter a number.");
+	    }
+	    finally{
+		input.nextLine();
 	    }
 	}
     }

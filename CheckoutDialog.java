@@ -15,7 +15,7 @@ public class CheckoutDialog {
     public void checkout(Customer customer){
 	CheckoutController controller = CheckoutController.getInstance();
 	Scanner in = new Scanner(System.in);
-	System.out.println(customer.cart);
+	System.out.println(customer.cart.prettyString());
 
 	String response = null;
 	do{

@@ -13,10 +13,15 @@ public class RemoveCartDialog {
     }
     
     public void remove(Customer customer){
-	Scanner in = new Scanner(System.in);
-	//customer.cart
-	System.out.println("not implemented :(");
-	//System.out.println("Enter a song name to remove: ");
-	//String response = in.nextLine();
+	Scanner input = new Scanner(System.in);
+	ShoppingCart cart = customer.cart;
+	
+	System.out.print("Enter a name: ");
+	String query = input.nextLine().trim().toLowerCase();
+	int num = cart.remove(query);
+	
+	System.out.print(num+" song");
+	if(num!=1) System.out.print("s");
+	System.out.println(" removed from the cart.");
     }
 }

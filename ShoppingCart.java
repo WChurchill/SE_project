@@ -22,6 +22,24 @@ class ShoppingCart extends ArrayList<Song> {
 	timeOfPurchase = new Date();
     }
     
+    public int remove(String toRemove){
+	int numRemoved = 0;
+	for(int index = this.size()-1; index>=0; index--){
+	    String songName = this.get(index).getName();
+	    if (songName.toLowerCase().contains(toRemove.toLowerCase())) {
+		this.remove(index);
+		numRemoved++;
+	    }
+	}
+	return numRemoved;
+    }
+
+    public void add(ArrayList<Song> addList){
+	for(Song s : addList){
+	    this.add(s);
+	}
+    }
+    
     public String prettyString(){
 	String str = "";
 	for(int i = 0; i<this.size(); i++){
@@ -30,7 +48,7 @@ class ShoppingCart extends ArrayList<Song> {
 	    str+= s.getArtist()+"\t";
 	    str+= s.getAlbum()+"\t";
 	    int minutes = s.getSeconds() / 60;
-	    int seconds = s.getSeconds()-(minutes % 60);
+	    int seconds = s.getSeconds()-(minutes * 60);
 	    str+= minutes+":"+seconds+"\t";
 	    str+= s.getYear()+"\t";
 	    str+= s.getPrice()+"\n";
@@ -38,9 +56,17 @@ class ShoppingCart extends ArrayList<Song> {
 	return str;
     }
 
+    public String fileString(){
+	String str = "";
+	for (Song song : this){
+	    str+=song;
+	}
+	return str;
+    }
+
     public String toString(){
-	String str = dateFormat.format(timeOfPurchase);
-	str+= "songs: "+this.size()+" total: "+getTotal();
+	String str = timeOfPurchase==null ? "" : dateFormat.format(timeOfPurchase);
+	str+= "\tsongs: "+this.size()+"\ttotal: "+String.format("% .2f",getTotal());
 	return str;
     }    
     
